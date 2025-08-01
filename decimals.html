@@ -113,6 +113,9 @@
         </div>
         <br>
         <button onclick="resetGame()">🔄 Remove Incorrect Pair</button>
+
+             <button onclick="goBack()">🏠 Back to Home</button>
+
         <p id="game-result"></p>
     </section>
 
@@ -187,6 +190,11 @@
 
             document.getElementById("game-result").innerHTML = "";
         }
+
+
+         function goBack() {
+      window.location.href = "index.html";
+    }
     </script>
 
 </body>
