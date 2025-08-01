@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentence Formation Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8e6a0;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      background: #fff3cd;
+      padding: 20px;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #ff8c00;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #e07b00;
+    }
+    .message {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .drag-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .drag-box {
+      padding: 10px 15px;
+      border: 1px solid #333;
+      background: #ffffff;
+      margin: 5px;
+      cursor: grab;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .drag-box.selected {
+      background-color: #ffe066;
+      border: 2px solid #007bff;
+    }
+    #dropArea {
+      min-height: 50px;
+      border: 2px dashed #333;
+      background-color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin: 10px auto;
+      padding: 10px;
+      max-width: 300px;
+      border-radius: 10px;
+    }
+    .video-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    iframe {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      border: none;
+    }
+
+    .btn-back {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video Section -->
+  <div class="video-container">
+    <h2>🎥 Learn Sentence Formation</h2>
+    <iframe src="https://www.youtube.com/embed/hQ1OwYu4GsY" allowfullscreen></iframe>
+    <p>Watch this video to understand how to form correct sentences.</p>
+  </div>
+
+  <!-- Fill in the Blank -->
+  <div class="container">
+    <h2>✍️ Fill in the Blank</h2>
+    <p>The sun <b>____</b> during the day.</p>
+    <input type="radio" name="fillBlank" value="shines"> Shines<br>
+    <input type="radio" name="fillBlank" value="sleeps"> Sleeps<br>
+    <input type="radio" name="fillBlank" value="jumps"> Jumps<br><br>
+    <button onclick="checkFillBlank()">Check Answer</button>
+    <p id="fillBlankMessage" class="message"></p>
+  </div>
+
+  <!-- Unscramble Sentence -->
+  <div class="container">
+    <h2>🔠 Unscramble the Sentence</h2>
+    <p>Select the correct sentence:</p>
+    <input type="radio" name="unscramble" value="Elephant is big"> Elephant is big.<br>
+    <input type="radio" name="unscramble" value="Big is Elephant"> Big is Elephant.<br>
+    <input type="radio" name="unscramble" value="An is big Elephant"> An is big Elephant.<br><br>
+    <button onclick="checkUnscramble()">Check Answer</button>
+    <p id="unscrambleMessage" class="message"></p>
+  </div>
+
+  <!-- Drag and Drop -->
+  <div class="container">
+    <h2>🧩 Drag or Tap to Form Sentence</h2>
+    <p>Arrange the words to make a correct sentence:</p>
+    <div class="drag-container">
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" onclick="tapWord(this)" id="word1">Elephant</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" onclick="tapWord(this)" id="word2">is</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" onclick="tapWord(this)" id="word3">big</div>
+    </div>
+    <br>
+    <div id="dropArea" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="tapDrop(event)">Drop here</div>
+    <br>
+    <button onclick="checkDragDrop()">Check Answer</button>
+    <p id="dragDropMessage" class="message"></p>
+  </div>
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <script>
+    let selectedWord = null;
+
+    function checkFillBlank() {
+      let options = document.getElementsByName("fillBlank");
+      let selectedAnswer = "";
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+          selectedAnswer = options[i].value;
+        }
+      }
+      let msg = document.getElementById("fillBlankMessage");
+      if (selectedAnswer === "shines") {
+        msg.innerHTML = "✅ Correct! The sun shines during the day.";
+        msg.style.color = "green";
+      } else {
+        msg.innerHTML = "❌ Try Again!";
+        msg.style.color = "red";
+      }
+    }
+
+    function checkUnscramble() {
+      let options = document.getElementsByName("unscramble");
+      let selectedAnswer = "";
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+          selectedAnswer = options[i].value;
+        }
+      }
+      let msg = document.getElementById("unscrambleMessage");
+      if (selectedAnswer === "Elephant is big") {
+        msg.innerHTML = "✅ Correct!";
+        msg.style.color = "green";
+      } else {
+        msg.innerHTML = "❌ Try Again!";
+        msg.style.color = "red";
+      }
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const id = ev.dataTransfer.getData("text");
+      const draggedElement = document.getElementById(id);
+      ev.target.appendChild(draggedElement);
+    }
+
+    // Tap-to-select fallback for mobile
+    function tapWord(el) {
+      if (el.style.visibility === "hidden") return;
+
+      // Clear previous selection
+      const allWords = document.querySelectorAll(".drag-box");
+      allWords.forEach(w => w.classList.remove("selected"));
+
+      selectedWord = el;
+      el.classList.add("selected");
+    }
+
+    function tapDrop(event) {
+      if (selectedWord && event.target.id === "dropArea") {
+        event.target.appendChild(selectedWord);
+        selectedWord.classList.remove("selected");
+        selectedWord = null;
+      }
+    }
+
+    function checkDragDrop() {
+      let dropArea = document.getElementById("dropArea");
+      let words = dropArea.getElementsByClassName("drag-box");
+      let sentence = "";
+      for (let i = 0; i < words.length; i++) {
+        sentence += words[i].innerHTML + " ";
+      }
+      sentence = sentence.trim();
+
+      let msg = document.getElementById("dragDropMessage");
+      if (sentence === "Elephant is big") {
+        msg.innerHTML = "✅ Correct!";
+        msg.style.color = "green";
+      } else {
+        msg.innerHTML = "❌ Try Again!";
+        msg.style.color = "red";
+      }
+    }
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+  </script>
+
+</body>
+</html>

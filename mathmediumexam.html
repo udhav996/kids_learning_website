@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Exam - Medium</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #85FFBD, #FFFB7D);
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+        .question {
+            font-size: 22px;
+            margin: 20px 0;
+        }
+        .options button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .options button:hover {
+            transform: scale(1.1);
+        }
+        .correct {
+            background: #28a745 !important;
+            color: white;
+        }
+        .wrong {
+            background: #dc3545 !important;
+            color: white;
+        }
+        #timer {
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #submitBtn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #submitBtn:hover {
+            background: #0056b3;
+        }
+        #celebration {
+            display: none;
+            font-size: 30px;
+            color: green;
+            font-weight: bold;
+            margin-top: 30px;
+            animation: pop 1s infinite alternate;
+        }
+        #homeBtn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 20px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #homeBtn:hover {
+            background: #cc5200;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📐 Math Exam - Medium</h1>
+    <h2 id="timer">Time Left: 90s</h2>
+
+    <div class="container" id="exam">
+        <div class="question" id="q1">1. What is 12 × 3?</div>
+        <div class="options">
+            <button onclick="checkAnswer(this, 'q1', 36)">24</button>
+            <button onclick="checkAnswer(this, 'q1', 36)">36</button>
+            <button onclick="checkAnswer(this, 'q1', 36)">42</button>
+        </div>
+
+        <div class="question" id="q2">2. What is the square of 7?</div>
+        <div class="options">
+            <button onclick="checkAnswer(this, 'q2', 49)">49</button>
+            <button onclick="checkAnswer(this, 'q2', 49)">42</button>
+            <button onclick="checkAnswer(this, 'q2', 49)">56</button>
+        </div>
+
+        <div class="question" id="q3">3. What is 81 ÷ 9?</div>
+        <div class="options">
+            <button onclick="checkAnswer(this, 'q3', 9)">8</button>
+            <button onclick="checkAnswer(this, 'q3', 9)">10</button>
+            <button onclick="checkAnswer(this, 'q3', 9)">9</button>
+
+        </div>
+
+        <div class="question" id="q4">4. What is 15 + 17?</div>
+<div class="options">
+    <button onclick="checkAnswer(this, 'q4', 32)">32</button>
+    <button onclick="checkAnswer(this, 'q4', 32)">30</button>
+    <button onclick="checkAnswer(this, 'q4', 32)">35</button>
+</div> 
+
+        <div class="question" id="q5">5. If a book costs ₹200 and you buy 3 books, how much will you pay?</div>
+        <div class="options">
+            <button onclick="checkAnswer(this, 'q5', 600)">400</button>
+            <button onclick="checkAnswer(this, 'q5', 600)">800</button>
+            <button onclick="checkAnswer(this, 'q5', 600)">600</button>
+
+        </div>
+
+        <div class="question" id="q6">6. What is 25% of 200?</div>
+        <div class="options">
+            <button onclick="checkAnswer(this, 'q6', 50)">40</button>
+            <button onclick="checkAnswer(this, 'q6', 50)">50</button>
+            <button onclick="checkAnswer(this, 'q6', 50)">60</button>
+        </div>
+    </div>
+
+    <button id="submitBtn" onclick="submitExam()">Submit Exam</button>
+
+    <h2 id="result"></h2>
+    <h2 id="celebration">🎉 Congratulations! 🎉</h2>
+    <button id="homeBtn" onclick="window.location.href='examhome.html'">🏠 Go Back Home</button>
+
+    <script>
+        let score = 0;
+        let timeLeft = 90;
+        let answeredQuestions = {};
+        const timerElement = document.getElementById("timer");
+
+        function checkAnswer(button, questionId, correctAnswer) {
+            if (answeredQuestions[questionId]) return;
+
+            answeredQuestions[questionId] = true;
+            let buttons = button.parentElement.children;
+
+            for (let btn of buttons) {
+                btn.disabled = true;
+                if (parseInt(btn.innerText) === correctAnswer) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("wrong");
+                }
+            }
+
+            if (parseInt(button.innerText) === correctAnswer) {
+                score++;
+            }
+        }
+
+        function countdown() {
+            if (timeLeft <= 0) {
+                submitExam();
+            } else {
+                timerElement.innerText = `Time Left: ${timeLeft}s`;
+                timeLeft--;
+                setTimeout(countdown, 1000);
+            }
+        }
+
+        function submitExam() {
+            document.getElementById("exam").style.display = "none";
+            document.getElementById("submitBtn").style.display = "none";
+            document.getElementById("result").innerHTML = `You scored ${score}/6`;
+
+            document.getElementById("celebration").style.display = "block";
+            document.getElementById("homeBtn").style.display = "block";
+        }
+
+        countdown();
+    </script>
+
+</body>
+</html> 

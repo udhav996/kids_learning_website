@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Hard Level Exam</title>
+    <style>
+        /* Styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            color: white;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px black;
+            color: black;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Timer */
+        #timer {
+            font-size: 22px;
+            font-weight: bold;
+            color: red;
+        }
+
+        /* Buttons */
+        button {
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        #submit { background: #28a745; }
+        #home { background: #007bff; display: none; }
+        button:hover { transform: scale(1.1); }
+
+        /* Celebration */
+        .celebration {
+            display: none;
+            font-size: 22px;
+            color: green;
+            font-weight: bold;
+        }
+
+        /* Score */
+        #score {
+            display: none;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>English Hard Level Exam</h2>
+        <p id="timer">Time Left: <span id="time">90</span>s</p>
+
+        <div id="questions">
+            <div class="question">
+                <p>1. What is the opposite of "Happy"?</p>
+                <label><input type="radio" name="q1" value="wrong"> Bright</label>
+                <label><input type="radio" name="q1" value="correct"> Sad</label>
+                <label><input type="radio" name="q1" value="wrong"> Smart</label>
+            </div>
+
+            <div class="question">
+                <p>2. What is the correct spelling?</p>
+                <label><input type="radio" name="q2" value="wrong"> Engleesh</label>
+                <label><input type="radio" name="q2" value="wrong"> Englesh</label>
+                <label><input type="radio" name="q2" value="correct">  English</label>
+            </div>
+
+            <div class="question">
+                <p>3. Choose the correct sentence:</p>
+                <label><input type="radio" name="q3" value="wrong"> The dog chase the cat.</label>
+                <label><input type="radio" name="q3" value="correct"> The dog chases the cat.</label>
+                <label><input type="radio" name="q3" value="wrong"> The dog chaseds the cat.</label>
+            </div>
+
+            <div class="question">
+                <p>4. Which word is a noun?</p>
+                <label><input type="radio" name="q4" value="wrong"> Running</label>
+                <label><input type="radio" name="q4" value="correct"> Elephant</label>
+                <label><input type="radio" name="q4" value="wrong"> Quickly</label>
+            </div>
+
+            <div class="question">
+                <p>5. Choose the correct preposition: "The book is ___ the table."</p>
+                <label><input type="radio" name="q5" value="correct"> on</label>
+                <label><input type="radio" name="q5" value="wrong"> in</label>
+                <label><input type="radio" name="q5" value="wrong"> under</label>
+            </div>
+
+            <div class="question">
+                <p>6. Select the correct word: "She is a very ___ girl."</p>
+                <label><input type="radio" name="q6" value="wrong"> fastly</label>
+                <label><input type="radio" name="q6" value="wrong"> goodly</label>
+                <label><input type="radio" name="q6" value="correct"> kind</label>
+            </div>
+        </div>
+
+        <button id="submit" onclick="checkAnswers()">Submit</button>
+        <p id="score"></p>
+        <p class="celebration" id="celebration">🎉 Congratulations! You completed the exam! 🎉</p>
+        <button id="home" onclick="goHome()">Go Back Home</button>
+    </div>
+
+    <script>
+        let timeLeft = 90;
+        let timerInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("time").textContent = timeLeft;
+            } else {
+                clearInterval(timerInterval);
+                alert("Time is up!");
+                checkAnswers();
+            }
+        }, 1000);
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
+           
+            let score = 0;
+            let totalQuestions = 6;
+            let answers = document.querySelectorAll('input[type="radio"]:checked');
+
+            answers.forEach(answer => {
+                if (answer.value === "correct") {
+                    score++;
+                }
+            });
+
+            document.getElementById("score").textContent = `Score: ${score} / ${totalQuestions}`;
+            document.getElementById("score").style.display = "block";
+            document.getElementById("celebration").style.display = "block";
+            document.getElementById("home").style.display = "block";
+        }
+
+        function goHome() {
+            window.location.href = "examhome.html";
+        }
+    </script>
+
+</body>
+</html> 

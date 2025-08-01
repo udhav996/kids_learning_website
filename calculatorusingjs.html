@@ -1,0 +1,110 @@
+<html>
+<head>
+   
+    <title>Modern Calculator</title>
+    <link rel="stylesheet" href="calculator.css">
+
+    <style> 
+
+.btn-back{
+
+    margin-top: -200px;
+    margin-right: 400px;
+    padding: 10px 20px;
+    width: 40%;
+}
+    </style>
+</head>
+
+<body>
+<div>
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+</div>
+    
+    <div class="calculator">
+        <div class="display">
+            <input type="text" id="result" disabled >
+        </div>
+        <div class="buttons">
+            <button onclick="clearDisplay()" class="operator">C</button>
+            <button onclick="backspace()" class="operator">⌫</button>
+            <button onclick="calculatePercentage()" class="operator">%</button>
+            <button onclick="appendCharacter('/')" class="operator">÷</button>
+
+            <button onclick="appendCharacter('7')">7</button>
+            <button onclick="appendCharacter('8')">8</button>
+            <button onclick="appendCharacter('9')">9</button>
+            <button onclick="appendCharacter('*')" class="operator">×</button>
+
+            <button onclick="appendCharacter('4')">4</button>
+            <button onclick="appendCharacter('5')">5</button>
+            <button onclick="appendCharacter('6')">6</button>
+            <button onclick="appendCharacter('-')" class="operator">−</button>
+
+            <button onclick="appendCharacter('1')">1</button>
+            <button onclick="appendCharacter('2')">2</button>
+            <button onclick="appendCharacter('3')">3</button>
+            <button onclick="appendCharacter('+')" class="operator">+</button>
+
+            <button onclick="appendCharacter('0')">0</button>
+            <button onclick="appendCharacter('.')">.</button>
+            <button onclick="calculateSquareRoot()">√</button>
+            <button onclick="calculateResult()" class="equal">=</button>
+        </div>
+    </div>
+
+
+    <script> 
+function appendCharacter(char) {
+    document.getElementById("result").value += char;
+}
+
+function clearDisplay() {
+    document.getElementById("result").value = "";
+}
+
+function backspace() {
+    let display = document.getElementById("result");
+    display.value = display.value.slice(0, -1);
+}
+
+function calculateResult() {
+    let display = document.getElementById("result");
+    try {
+        display.value = eval(display.value); 
+    } catch{
+        display.value = "Error"; 
+    }
+}
+function calculatePercentage() {
+    let display = document.getElementById("result");
+    display.value = (parseFloat(display.value) / 100).toString();
+}
+
+function calculateSquareRoot() {
+    let display = document.getElementById("result");
+    display.value = Math.sqrt(parseFloat(display.value)).toString();
+}
+document.addEventListener("keydown", function(event) {
+    let key = event.key;
+    let allowedKeys = "0123456789/*-+.EnterBackspace";
+   
+    if (allowedKeys.includes(key)) {
+        event.preventDefault();
+        if (key === "Enter") {
+            calculateResult();
+        } else if (key === "Backspace") {
+            backspace();
+        } else {
+            appendCharacter(key);
+        }
+    }
+}); 
+
+function goBack() {
+            window.location.href = "mathcodemaster.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html>

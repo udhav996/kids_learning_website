@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Medium Exam</title>
+    <style>
+        /* Background and Animation */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+        }
+
+        /* Container */
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Timer */
+        #timer {
+            font-size: 22px;
+            font-weight: bold;
+            color: red;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        #submit { background: #28a745; }
+        #home { background: #007bff; display: none; }
+        button:hover { transform: scale(1.1); }
+
+        /* Celebration */
+        .celebration {
+            display: none;
+            font-size: 22px;
+            color: green;
+            font-weight: bold;
+        }
+
+        /* Score */
+        #score {
+            display: none;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>English Medium Exam</h2>
+        <p id="timer">Time Left: <span id="time">90</span>s</p>
+
+        <div id="questions">
+            <div class="question">
+                <p>1. Choose the correct sentence:</p>
+                <label><input type="radio" name="q1" value="correct"> She goes to school every day.</label>
+                <label><input type="radio" name="q1" value="wrong"> She go to school every day.</label>
+                <label><input type="radio" name="q1" value="wrong"> She going to school every day.</label>
+            </div>
+
+            <div class="question">
+                <p>2. Fill in the blank: I ____ my homework before dinner.</p>
+                <label><input type="radio" name="q2" value="correct"> finish</label>
+                <label><input type="radio" name="q2" value="wrong"> finishes</label>
+                <label><input type="radio" name="q2" value="wrong"> finished</label>
+            </div>
+
+            <div class="question">
+                <p>3. What is the opposite of "happy"?</p>
+                <label><input type="radio" name="q3" value="correct"> Sad</label>
+                <label><input type="radio" name="q3" value="wrong"> Angry</label>
+                <label><input type="radio" name="q3" value="wrong"> Excited</label>
+            </div>
+
+            <div class="question">
+                <p>4. Which word is a noun?</p>
+                <label><input type="radio" name="q4" value="correct"> Dog</label>
+                <label><input type="radio" name="q4" value="wrong"> Run</label>
+                <label><input type="radio" name="q4" value="wrong"> Quickly</label>
+            </div>
+
+            <div class="question">
+                <p>5. What is the plural of "child"?</p>
+                <label><input type="radio" name="q5" value="correct"> Children</label>
+                <label><input type="radio" name="q5" value="wrong"> Childs</label>
+                <label><input type="radio" name="q5" value="wrong"> Childes</label>
+            </div>
+
+            <div class="question">
+                <p>6. Identify the adjective: "The sky is blue."</p>
+                <label><input type="radio" name="q6" value="correct"> Blue</label>
+                <label><input type="radio" name="q6" value="wrong"> Sky</label>
+                <label><input type="radio" name="q6" value="wrong"> Is</label>
+            </div>
+        </div>
+
+        <button id="submit" onclick="checkAnswers()">Submit</button>
+        <p id="score"></p>
+        <p class="celebration" id="celebration">🎉 Congratulations! You completed the exam! 🎉</p>
+        <button id="home" onclick="goHome()">Go Back Home</button>
+    </div>
+
+    <script>
+        let timeLeft = 90;
+        let timerInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("time").textContent = timeLeft;
+            } else {
+                clearInterval(timerInterval);
+                alert("Time is up!");
+                checkAnswers();
+            }
+        }, 1000);
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
+           
+            let score = 0;
+            let totalQuestions = 6;
+            let answers = document.querySelectorAll('input[type="radio"]:checked');
+
+            answers.forEach(answer => {
+                if (answer.value === "correct") {
+                    score++;
+                }
+            });
+
+            document.getElementById("score").textContent = `Score: ${score} / ${totalQuestions}`;
+            document.getElementById("score").style.display = "block";
+            document.getElementById("celebration").style.display = "block";
+            document.getElementById("home").style.display = "block";
+        }
+
+        function goHome() {
+            window.location.href = "examhome.html";
+        }
+    </script>
+
+</body>
+</html> 

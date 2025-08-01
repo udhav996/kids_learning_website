@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times Table Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            margin: 50px auto;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        h1 { font-size: 26px; color: #ff5722; }
+        select, input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        button:hover { background: #218838; }
+        #feedback { font-weight: bold; font-size: 18px; }
+        .progress-bar {
+            width: 100%; height: 10px; background: #ddd;
+            border-radius: 5px; margin-top: 10px; overflow: hidden;
+        }
+        .progress { height: 100%; width: 0%; background: #4caf50; transition: width 0.5s ease-in-out; }
+        .timer { font-size: 20px; color: #d9534f; font-weight: bold; }
+        #celebration {
+            display: none;
+            font-size: 30px;
+            color: gold;
+            animation: pop 0.5s infinite alternate;
+        }
+        @keyframes pop {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Times Table Game 🎮</h1>
+        <label for="tableSelect">Choose a Table:</label>
+        <select id="tableSelect">
+            <option value="2">2x Table</option>
+            <option value="3">3x Table</option>
+            <option value="4">4x Table</option>
+            <option value="5">5x Table</option>
+            <option value="6">6x Table</option>
+            <option value="7">7x Table</option>
+            <option value="8">8x Table</option>
+            <option value="9">9x Table</option>
+            <option value="10">10x Table</option>
+            <option value="11">All Tables (2-10)</option>
+        </select>
+       
+        <div id="questionBox">
+            <p id="question"></p>
+            <input type="number" id="answerInput" placeholder="Your Answer">
+            <button onclick="checkAnswer()">Submit</button>
+            <p id="feedback"></p>
+        </div>
+
+        <p>Correct Answers: <span id="score">0</span> / 15</p>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <p class="timer">Time Left: <span id="timer">60</span> sec</p>
+
+        <p id="celebration">🎉🎊 YOU WON! PERFECT SCORE! 🎊🎉</p>
+    </div>
+
+    <audio id="correctSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+    <audio id="wrongSound" src="https://www.fesliyanstudios.com/play-mp3/338"></audio>
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+
+    <script>
+        let score = 0;
+        let questionCount = 0;
+        let currentTable = 2;
+        let num1, num2, correctAnswer;
+        let timeLeft = 60;
+        let timerInterval;
+
+        document.getElementById("tableSelect").addEventListener("change", function() {
+            currentTable = parseInt(this.value);
+            resetGame();
+        });
+
+        function generateQuestion() {
+            if (currentTable === 11) {
+                num1 = Math.floor(Math.random() * 9) + 2; // Any table from 2-10
+            } else {
+                num1 = currentTable;
+            }
+            num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 * num2;
+
+            document.getElementById("question").innerText = `${num1} × ${num2} = ?`;
+            document.getElementById("answerInput").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = parseInt(document.getElementById("answerInput").value);
+            let feedback = document.getElementById("feedback");
+            let correctSound = document.getElementById("correctSound");
+            let wrongSound = document.getElementById("wrongSound");
+
+            if (userAnswer === correctAnswer) {
+                score++;
+                feedback.innerText = "🎉 Correct! Great job!";
+                feedback.style.color = "green";
+                correctSound.play();
+            } else {
+                feedback.innerText = "❌ Oops! Try again.";
+                feedback.style.color = "red";
+                wrongSound.play();
+            }
+
+            questionCount++;
+            document.getElementById("score").innerText = `${score} / 15`;
+            updateProgress();
+
+            if (questionCount < 15) {
+                setTimeout(generateQuestion, 1000);
+            } else {
+                clearInterval(timerInterval);
+                if (score === 15) {
+                    document.getElementById("celebration").style.display = "block";
+                } else {
+                    alert(`Game Over! You got ${score} correct.`);
+                }
+                setTimeout(resetGame, 3000);
+            }
+        }
+
+        function updateProgress() {
+            let progress = document.getElementById("progress");
+            let percentage = (score / 15) * 100;
+            progress.style.width = percentage + "%";
+        }
+
+        function resetGame() {
+            score = 0;
+            questionCount = 0;
+            timeLeft = 60;
+            document.getElementById("score").innerText = "0 / 15";
+            document.getElementById("progress").style.width = "0%";
+            document.getElementById("timer").innerText = timeLeft;
+            document.getElementById("celebration").style.display = "none";
+            startTimer();
+            generateQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert(`Time's up! You got ${score} correct.`);
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        window.onload = () => { resetGame(); };
+
+        function goBack() {
+            window.location.href = "mathgamelandingpage.html"; // Redirects to homepage
+        }
+    </script>
+</body>
+</html> 

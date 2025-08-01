@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn Division</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #1e7e34;
+    }
+
+    .btn-back {
+      background-color: #007bff;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .video-lesson iframe {
+      width: 90%;
+      max-width: 600px;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .quiz-box, .drag-drop-box {
+      border: 2px solid #000;
+      padding: 15px;
+      display: inline-block;
+      background-color: #fff;
+      border-radius: 10px;
+    }
+
+    .drag-box {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #ddd;
+      cursor: grab;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+
+    .drop-box {
+      width: 120px;
+      height: 50px;
+      border: 2px dashed #000;
+      margin: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+      vertical-align: middle;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .wrong {
+      background-color: #ff6666 !important;
+    }
+
+    .selected {
+      outline: 3px solid gold;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .drag-drop-box {
+        width: 60%;
+      }
+
+      .drag-box, .drop-box {
+        display: block;
+        width: 50%;
+        margin: 10px auto;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video Lesson -->
+  <section class="video-lesson fade-in">
+    <h2>🎥 Watch & Learn</h2>
+    <p>Watch this video to learn division.</p>
+    <iframe src="https://www.youtube.com/embed/rGMecZ_aERo"
+      title="Division for Kids"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+  </section>
+
+  <!-- Explanation -->
+  <section class="explanation fade-in">
+    <h2>What is Division?</h2>
+    <p>Division means sharing or grouping. For example:</p>
+    <p>6 ÷ 2 = 3 (because 6 items shared into 2 equal groups gives 3 in each group)</p>
+  </section>
+
+  <!-- Question -->
+  <section class="question fade-in">
+    <h2>📝 Solve This</h2>
+    <p>What is 12 ÷ 3?</p>
+    <input type="number" id="answer" placeholder="Your answer">
+    <button onclick="checkAnswer()">Check</button>
+    <p id="answer-result"></p>
+  </section>
+
+  <!-- Quiz -->
+  <section class="quiz fade-in">
+    <h2>🎯 Quiz Time</h2>
+    <p>What is 16 ÷ 4?</p>
+    <div class="quiz-box">
+      <input type="radio" name="quiz" value="2"> 2 <br>
+      <input type="radio" name="quiz" value="4"> 4 <br>
+      <input type="radio" name="quiz" value="6"> 6 <br>
+      <button onclick="checkQuiz()">Submit</button>
+      <p id="quiz-result"></p>
+    </div>
+  </section>
+
+  <!-- Drag-and-Drop Game -->
+  <section class="drag-drop fade-in">
+    <h2>🎮 Division Matching Game</h2>
+    <p>Match the correct division answer.</p>
+    <div class="drag-drop-box" id="game-box">
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag1" data-answer="3">9 ÷ 3</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag2" data-answer="2">8 ÷ 4</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag3" data-answer="5">10 ÷ 2</div>
+      <br><br>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '3')" data-answer="3">3</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '2')" data-answer="2">2</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '5')" data-answer="5">5</div>
+    </div>
+    <br>
+    <button onclick="resetGame()">🔄 Reset Game</button>
+    <p id="game-result"></p>
+  </section>
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <script>
+    function checkAnswer() {
+      let answer = document.getElementById("answer").value;
+      let result = document.getElementById("answer-result");
+      if (answer == 4) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.innerHTML = "❌ Try again!";
+        result.style.color = "red";
+      }
+    }
+
+    function checkQuiz() {
+      let options = document.getElementsByName("quiz");
+      let result = document.getElementById("quiz-result");
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].checked && options[i].value == "4") {
+          result.innerHTML = "✅ Correct!";
+          result.style.color = "green";
+          return;
+        }
+      }
+      result.innerHTML = "❌ Try again!";
+      result.style.color = "red";
+    }
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+
+    const isMobile = /iPhone|iPad|Android|Mobile/i.test(navigator.userAgent);
+    let selectedDrag = null;
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drop(event, correctAnswer) {
+      event.preventDefault();
+      const draggedId = event.dataTransfer.getData("text");
+      const draggedElement = document.getElementById(draggedId);
+
+      if (draggedElement && draggedElement.getAttribute("data-answer") === correctAnswer) {
+        event.target.innerHTML = "";
+        event.target.appendChild(draggedElement);
+        draggedElement.draggable = false;
+        draggedElement.style.cursor = "default";
+        document.getElementById("game-result").innerText = "✅ Correct Match!";
+        document.getElementById("game-result").style.color = "green";
+      } else {
+        event.target.classList.add("wrong");
+        document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+        document.getElementById("game-result").style.color = "red";
+        setTimeout(() => event.target.classList.remove("wrong"), 1000);
+      }
+    }
+
+    function resetGame() {
+      const drags = document.querySelectorAll(".drag-box");
+      const drops = document.querySelectorAll(".drop-box");
+      const gameBox = document.getElementById("game-box");
+
+      drops.forEach(drop => {
+        const child = drop.querySelector(".drag-box");
+        if (child) {
+          gameBox.insertBefore(child, drop);
+          child.draggable = true;
+          child.style.cursor = "grab";
+        }
+        drop.innerHTML = drop.getAttribute("data-answer");
+      });
+
+      document.getElementById("game-result").innerText = "";
+    }
+
+    // ✅ Tap-to-drop support for mobile
+    if (isMobile) {
+      document.querySelectorAll(".drag-box").forEach(el => {
+        el.setAttribute("draggable", "false");
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".drag-box").forEach(box => box.classList.remove("selected"));
+          el.classList.add("selected");
+          selectedDrag = el;
+        });
+      });
+
+      document.querySelectorAll(".drop-box").forEach(box => {
+        box.addEventListener("click", () => {
+          if (selectedDrag) {
+            if (selectedDrag.getAttribute("data-answer") === box.getAttribute("data-answer")) {
+              box.innerHTML = "";
+              box.appendChild(selectedDrag);
+              selectedDrag.classList.remove("selected");
+              selectedDrag.style.cursor = "default";
+              selectedDrag = null;
+              document.getElementById("game-result").innerText = "✅ Correct Match!";
+              document.getElementById("game-result").style.color = "green";
+            } else {
+              box.classList.add("wrong");
+              document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+              document.getElementById("game-result").style.color = "red";
+              setTimeout(() => box.classList.remove("wrong"), 1000);
+            }
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numbers & Counting - Learn Math</title>
+    
+    <style>
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Header */
+header h1 {
+    font-size: 2.5rem;
+    color: #f1c40f;
+    text-shadow: 0 0 10px #f1c40f, 0 0 20px #f39c12;
+}
+
+/* Section Styling */
+section {
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    max-width: 600px;
+}
+
+/* Images */
+img {
+    width: 80%;
+    max-width: 300px;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Buttons */
+button {
+    background: #1dd1a1;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #10ac84;
+    transform: scale(1.1);
+}
+
+/* Drag & Drop Game */
+.game-container, .draggable-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.drop-box, .draggable {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.draggable {
+    cursor: grab;
+}
+
+.dragging {
+    opacity: 0.5;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+    animation: slideIn 1.5s ease-in-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.bounce {
+    animation: bounce 1.5s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+.pop {
+    animation: pop 0.5s ease-in-out;
+}
+
+@keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+
+/* ✅ 1. Make YouTube videos responsive */
+.video-lesson iframe {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+}
+
+.draggable {
+  font-size: 2rem;
+  margin: 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+.draggable.selected {
+  outline: 3px solid #f1c40f;
+  border-radius: 10px;
+}
+
+.drop-box {
+  width: 80px;
+  height: 80px;
+  font-size: 2rem;
+  border: 2px dashed #ccc;
+  margin: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="fade-in">📢 Numbers & Counting</h1>
+        <p class="fade-in">Learn numbers and how to count in a fun way!</p>
+    </header>
+
+    <!-- Teaching Section -->
+    <section class="teaching-content slide-in">
+        <h2>🌟 What are Numbers?</h2>
+        <p>Numbers help us count things around us. We use numbers to count objects, tell time, and even play games!</p>
+        <img src="table.jpg" alt="Numbers Chart" class="bounce">
+    </section>
+
+    <!-- Video Lesson -->
+    <section class="video-lesson fade-in">
+        <h2>🎥 Watch & Learn</h2>
+        <p>Watch this video to learn numbers from 1 to 100.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/jQMUa2zIchs"
+            title="Counting Numbers 1 to 100" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </section> 
+
+    <!-- Video Lesson - Song -->
+<section class="video-lesson fade-in">
+    <h2>🎵 Enjoy a Fun Counting Song</h2>
+    <p>Sing along with this fun counting song!</p>
+    <iframe width="560" height="315"
+        src="https://www.youtube.com/embed/bGetqbqDVaA"
+        title="Counting Song"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+</section> 
+    
+
+    <section class="teaching-content fade-in">
+        <h2>🔢 Learning to Count</h2>
+        <p>Let's count the objects below! Click on the correct number.</p>
+        <div class="counting-exercise">
+            <img src="https://media.baamboozle.com/uploads/images/94546/1660115374_273297.png" alt="Count the apples">
+            <button onclick="checkCount(6)">6</button>
+            <button onclick="checkCount(4)">4</button>
+            <button onclick="checkCount(5)">5</button>
+        </div>
+        <p id="countingFeedback"></p>
+    </section>
+
+    <!-- Mini Quiz -->
+    <section class="mini-quiz slide-in">
+        <h2>❓ Quick Quiz</h2>
+        <p>What comes after 5?</p>
+        <input type="text" id="quizAnswer">
+        <button onclick="checkQuiz()">Submit</button>
+        <p id="quizFeedback"></p>
+    </section>
+
+    <!-- Drag and Drop Game -->
+    <section class="drag-drop fade-in">
+        <h2>🎯 Drag & Match</h2>
+        <p>Match the correct number of fruits to the right box.</p>
+        <div class="game-container">
+            <div class="drop-box" id="drop1" data-number="1">1️⃣</div>
+            <div class="drop-box" id="drop2" data-number="2">2️⃣</div>
+            <div class="drop-box" id="drop3" data-number="3">3️⃣</div>
+        </div>
+
+        <div class="draggable-container">
+            <div class="draggable" draggable="true" id="drag1" data-number="1">🍎</div>
+            <div class="draggable" draggable="true" id="drag2" data-number="2">🍏🍏</div>
+            <div class="draggable" draggable="true" id="drag3" data-number="3">🍌🍌🍌</div>
+        </div>
+
+        <p id="dragDropFeedback"></p>
+    </section>
+
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        function checkCount(answer) {
+            let feedback = document.getElementById("countingFeedback");
+            if (answer === 6) {
+                feedback.innerHTML = "✅ Correct! There are 6 apples!";
+                feedback.style.color = "green";
+            } else {
+                feedback.innerHTML = "❌ Try Again!";
+                feedback.style.color = "red";
+            }
+        }
+
+        function checkQuiz() {
+            let answer = document.getElementById("quizAnswer").value;
+            let feedback = document.getElementById("quizFeedback");
+            if (answer == "6") {
+                feedback.innerHTML = "✅ Correct! 🎉";
+                feedback.style.color = "green";
+            } else {
+                feedback.innerHTML = "❌ Try Again! 😊";
+                feedback.style.color = "red";
+            }
+        }
+
+        // Drag & Drop Logic
+        const draggables = document.querySelectorAll(".draggable");
+        const dropBoxes = document.querySelectorAll(".drop-box");
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener("dragstart", (event) => {
+                event.dataTransfer.setData("text", draggable.id);
+            });
+        });
+
+        dropBoxes.forEach(dropBox => {
+            dropBox.addEventListener("dragover", (event) => {
+                event.preventDefault();
+            });
+
+            dropBox.addEventListener("drop", (event) => {
+                event.preventDefault();
+                const draggableId = event.dataTransfer.getData("text");
+                const draggedElement = document.getElementById(draggableId);
+
+                const correctNumber = dropBox.getAttribute("data-number");
+                const draggedNumber = draggedElement.getAttribute("data-number");
+
+                if (correctNumber === draggedNumber && dropBox.children.length === 0) {
+                    dropBox.appendChild(draggedElement);
+                    document.getElementById("dragDropFeedback").innerHTML = "✅ Correct Match!";
+                    document.getElementById("dragDropFeedback").style.color = "green";
+                } else {
+                    document.getElementById("dragDropFeedback").innerHTML = "❌ Wrong! Try Again.";
+                    document.getElementById("dragDropFeedback").style.color = "red";
+                }
+            });
+        });
+
+        function goBack() {
+            window.location.href = "mathcodemaster.html"; // Redirects to homepage
+        }
+    </script>
+
+<script>
+let selectedFruit = null;
+const isMobile = /iPhone|iPad|Android|Mobile/i.test(navigator.userAgent);
+
+// ✅ DESKTOP Drag & Drop Events
+if (!isMobile) {
+  document.querySelectorAll('.draggable').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      e.dataTransfer.setData("text/plain", e.target.id);
+    });
+  });
+
+  document.querySelectorAll('.drop-box').forEach(box => {
+    box.addEventListener('dragover', e => {
+      e.preventDefault();
+    });
+
+    box.addEventListener('drop', e => {
+      e.preventDefault();
+      const draggedId = e.dataTransfer.getData("text/plain");
+      const draggedEl = document.getElementById(draggedId);
+      const fruitNumber = draggedEl.getAttribute('data-number');
+      const boxNumber = box.getAttribute('data-number');
+
+      if (fruitNumber === boxNumber) {
+        box.innerHTML = draggedEl.innerHTML;
+        box.style.background = '#d4edda';
+        document.getElementById('dragDropFeedback').innerText = "✅ Correct Match!";
+      } else {
+        box.style.background = '#f8d7da';
+        document.getElementById('dragDropFeedback').innerText = "❌ Try again!";
+      }
+    });
+  });
+}
+
+// ✅ MOBILE Tap-to-Match Logic
+else {
+  // Disable drag behavior
+  document.querySelectorAll('.draggable').forEach(el => {
+    el.setAttribute('draggable', 'false');
+
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.draggable').forEach(f => f.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedFruit = el;
+    });
+  });
+
+  document.querySelectorAll('.drop-box').forEach(box => {
+    box.addEventListener('click', () => {
+      if (selectedFruit) {
+        const fruitNumber = selectedFruit.getAttribute('data-number');
+        const boxNumber = box.getAttribute('data-number');
+
+        if (fruitNumber === boxNumber) {
+          box.innerHTML = selectedFruit.innerHTML;
+          box.style.background = '#d4edda';
+          document.getElementById('dragDropFeedback').innerText = "✅ Correct Match!";
+        } else {
+          box.style.background = '#f8d7da';
+          document.getElementById('dragDropFeedback').innerText = "❌ Try again!";
+        }
+
+        selectedFruit.classList.remove('selected');
+        selectedFruit = null;
+      }
+    });
+  });
+}
+</script>
+
+
+
+</body>
+</html> 

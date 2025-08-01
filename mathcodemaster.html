@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Learning - Fun & Code</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="mathcodemaster.css">
+</head>
+<body>
+
+    
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="#">Fun Learn</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+
+                <!-- Learn Math Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#">Learn Math</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item" href="#">Basic</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/numbers-counting.html">Numbers & Counting</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/addition.html">Addition</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/substraction.html">Subtraction</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/multiplecation.html">Multiplication</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/division.html">Division</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/shapes.html">Shapes</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/fractions.html">Fractions</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/measurements.html">Measurements</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Advanced</a></li>
+                    </ul>
+                </li>
+
+                <!-- Learn English Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#">Learn English</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item " href="#">Basic</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/alphabet&phonics.html">Alphabet & Phonics</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/sightwords&spelling.html">Sight Words & Spelling</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/grammer.html">Grammar</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/sentenceformation.html">Sentence Formation</a></li>
+                                <li><a class="dropdown-item" href="file:///C:/mathcodemaster/grammer2.html">Grammar 2</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Advanced</a></li>
+                    </ul>
+                </li>
+
+                <!-- Exams -->
+                <li class="nav-item"><a class="nav-link" href="file:///C:/mathcodemaster/examhome.html">Exams</a></li>
+
+                <!-- Games Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link " href="#">Games</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" id="games" href="file:///C:/mathcodemaster/mathgamelandingpage.html">Math Games</a></li>
+                        <li><a class="dropdown-item"  id="games" href="file:///C:/mathcodemaster/englishgamelandingpage.html">English Games</a></li>
+                    </ul>
+                </li>
+
+                <!-- Tools Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#">Tools</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="file:///C:/mathcodemaster/tablegeneratortool.html">Table Generator</a></li>
+                        <li><a class="dropdown-item" href="file:///C:/mathcodemaster/calculatorusingjs.html">calculator</a></li>
+                        <li><a class="dropdown-item" href="file:///C:/mathcodemaster/mathprbgeneratortool.html">Tablesgametool</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> 
+
+<!-- Animated Cartoon Character -->
+<div class="cartoon-container">
+    <img src="happy.gif" id="cartoon" alt="Cartoon">
+</div>
+
+<!-- GSAP Animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+
+
+    
+
+    <!-- Hero Section -->
+    <header class="hero-section text-center d-flex align-items-center">
+        <div class="container">
+            <h1 class="fw-bold animated-title">🚀 Fun Learning for Kids! </h1>
+            <p class="lead">Learn Math & English with Quizzes, Games, and Challenges.</p>
+            <a href="file:///C:/mathcodemaster/numbers-counting.html" class="btn btn-glass btn-lg animated-btn">Start Learning <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </header>
+
+    <!-- Featured Quizzes & Challenges -->
+<section class="container text-center my-5">
+    <h2 class="fw-bold neon-text">✨ Explore Quizzes & Challenges ✨</h2>
+    <p class="text-light">Practice, play, and earn rewards!</p>
+
+    <!-- Math Cards -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="glass-card quiz-card" data-color="#ff6b6b">
+                <h5 class="fw-bold">📊 Math Quiz</h5>
+                <p>Test your math skills with fun quizzes.</p>
+                <a href="file:///C:/mathcodemaster/mathquizonbasics.html" class="btn btn-glass animated-btn">Start Quiz</a>
+            </div>
+        </div>           
+        <div class="col-md-4">
+            <div class="glass-card quiz-card" data-color="#1dd1a1">
+                <h5 class="fw-bold">📊 Math Exam</h5>
+                <p>Test your math skills with a challenging exam.</p>
+                <a href="file:///C:/mathcodemaster/examhome.html" class="btn btn-glass animated-btn">Take Exam</a>
+            </div>
+        </div>    
+        <div class="col-md-4">
+            <div class="glass-card quiz-card" data-color="#feca57">
+                <h5 class="fw-bold">🎲 Math Games</h5>
+                <p>Play interactive games to learn math easily.</p>
+                <a href="file:///C:/mathcodemaster/mathgamelandingpage.html" class="btn btn-glass animated-btn">Play Now</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- English Cards -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="glass-card quiz-card" data-color="#ff9f43">
+            <h5 class="fw-bold">📝 English Quiz</h5>
+            <p>Test your English skills with fun and interactive quizzes .</p>
+            <a href="file:///C:/mathcodemaster/englishquizbasics.html" class="btn btn-glass animated-btn">Start Quiz</a>
+        </div>
+    </div>          
+    <div class="col-md-4">
+        <div class="glass-card quiz-card" data-color="#54a0ff">
+            <h5 class="fw-bold">📚 English Exam</h5>
+            <p>Challenge yourself with an English exam and check your progress.</p>
+            <a href="file:///C:/mathcodemaster/examhome.html" class="btn btn-glass animated-btn">Take Exam</a>
+        </div>
+    </div>          
+    <div class="col-md-4">
+        <div class="glass-card quiz-card" data-color="#ff6b6b">
+            <h5 class="fw-bold">🎮 English Game</h5>
+            <p>Learn English through exciting and engaging word games.</p>
+            <a href="file:///C:/mathcodemaster/englishgamelandingpage.html" class="btn btn-glass animated-btn">Play Now</a>
+        </div>
+    </div>
+</div>
+
+
+    <!-- English Cards -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="glass-card quiz-card" data-color="#ff9f43">
+                <h5 class="fw-bold">📖 Story Time</h5>
+                <p>Listen to interactive stories and improve reading.</p>
+                <a href="file:///C:/mathcodemaster/storytimecard.html" class="btn btn-glass animated-btn">Read & Listen</a>
+            </div>
+        </div>           
+             
+        <div class="col-md-4">
+            <div class="glass-card quiz-card" data-color="#feca57">
+                <h5 class="fw-bold">🎓 Exam Zone</h5>
+                <p>Take quick tests and earn certificates.</p>
+                <a href="file:///C:/mathcodemaster/examhome.html" class="btn btn-glass animated-btn">Start Exam</a>
+            </div>
+        </div>     
+       
+
+    </div>
+
+    
+</section> 
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach(dropdown => {
+            const menu = dropdown.querySelector(".dropdown-menu");
+    
+            dropdown.addEventListener("mouseenter", () => {
+                gsap.to(menu, { opacity: 1, y: 10, display: "block", duration: 0.3 });
+            });
+    
+            dropdown.addEventListener("mouseleave", () => {
+                gsap.to(menu, { opacity: 0, y: -10, display: "none", duration: 0.3 });
+            });
+    
+            const submenus = dropdown.querySelectorAll(".dropdown-submenu");
+            submenus.forEach(submenu => {
+                const submenuMenu = submenu.querySelector(".dropdown-menu");
+    
+                submenu.addEventListener("mouseenter", () => {
+                    gsap.to(submenuMenu, { opacity: 1, x: 10, display: "block", duration: 0.3 });
+                });
+    
+                submenu.addEventListener("mouseleave", () => {
+                    gsap.to(submenuMenu, { opacity: 0, x: -10, display: "none", duration: 0.3 });
+                });
+            });
+        });
+    });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="mathcodemaster.js"></script>
+
+</body>
+</html> 

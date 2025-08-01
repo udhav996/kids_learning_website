@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard Level - Math Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: #333;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #d63031;
+        }
+        .question {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .submit-btn {
+            background: #0984e3;
+            color: white;
+            font-weight: bold;
+        }
+        .celebration {
+            display: none;
+            font-size: 24px;
+            color: #00b894;
+            margin-top: 20px;
+            animation: pop 0.5s ease-in-out;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        #timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🧠 Hard Level - Math Exam</h2>
+        <p>Answer all questions before time runs out!</p>
+        <p id="timer">⏳ Time Left: 60s</p>
+
+        <div id="quiz">
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1️⃣ What is 256 + 789?</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 1045, 0)">1045</button>
+                    <button onclick="checkAnswer(this, 1025, 0)">1025</button>
+                    <button onclick="checkAnswer(this, 1010, 0)">1010</button>
+                    <button onclick="checkAnswer(this, 1080, 0)">1080</button>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <p>2️⃣ What is 945 - 567?</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 378, 1)">378</button>
+                    <button onclick="checkAnswer(this, 400, 1)">400</button>
+                    <button onclick="checkAnswer(this, 365, 1)">365</button>
+                    <button onclick="checkAnswer(this, 390, 1)">390</button>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <p>3️⃣ What is 14 × 12?</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 168, 2)">168</button>
+                    <button onclick="checkAnswer(this, 176, 2)">176</button>
+                    <button onclick="checkAnswer(this, 180, 2)">180</button>
+                    <button onclick="checkAnswer(this, 164, 2)">164</button>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <p>4️⃣ A baker has 96 cookies and wants to divide them equally into 8 boxes. How many cookies per box?</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 12, 3)">12</button>
+                    <button onclick="checkAnswer(this, 14, 3)">14</button>
+                    <button onclick="checkAnswer(this, 16, 3)">16</button>
+                    <button onclick="checkAnswer(this, 10, 3)">10</button>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <p>5️⃣ A hexagon has how many sides?</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 6, 4)">6</button>
+                    <button onclick="checkAnswer(this, 8, 4)">8</button>
+                    <button onclick="checkAnswer(this, 5, 4)">5</button>
+                    <button onclick="checkAnswer(this, 7, 4)">7</button>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <p>6️⃣ If 1 meter = 100 cm, then 2.5 meters = ? cm</p>
+                <div class="options">
+                    <button onclick="checkAnswer(this, 250, 5)">250</button>
+                    <button onclick="checkAnswer(this, 200, 5)">200</button>
+                    <button onclick="checkAnswer(this, 300, 5)">300</button>
+                    <button onclick="checkAnswer(this, 275, 5)">275</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="submitQuiz()">Submit</button>
+        <p id="result"></p>
+        <p class="celebration">🎉 Congratulations! You completed the Hard Level! 🎉</p>
+        <button id="home-btn" style="display: none;" onclick="goHome()">🏠 Go Back Home</button>
+    </div>
+
+    <script>
+        let correctAnswers = [1045, 378, 168, 12, 6, 250];
+        let userAnswers = new Array(correctAnswers.length).fill(null);
+        let timeLeft = 60;
+        let timer = setInterval(updateTimer, 1000);
+
+        function checkAnswer(button, answer, index) {
+            userAnswers[index] = answer; // Store answer at correct index
+            let buttons = button.parentElement.getElementsByTagName("button");
+            for (let btn of buttons) {
+                btn.disabled = true; // Disable all options after selection
+            }
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("timer").innerText = `⏳ Time Left: ${timeLeft}s`;
+            } else {
+                clearInterval(timer);
+                submitQuiz();
+            }
+        }
+
+        function submitQuiz() {
+            clearInterval(timer);
+            let score = 0;
+            for (let i = 0; i < correctAnswers.length; i++) {
+                if (userAnswers[i] === correctAnswers[i]) {
+                    score++;
+                }
+            }
+            document.getElementById("result").innerText = `Your Score: ${score} / ${correctAnswers.length}`;
+            document.querySelector(".celebration").style.display = "block";
+            document.getElementById("home-btn").style.display = "block";
+        }
+
+        function goHome() {
+            window.location.href = "examhome.html"; // Change to actual homepage link
+        }
+    </script>
+
+</body>
+</html> 

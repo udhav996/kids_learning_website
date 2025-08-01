@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Word Matching Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: url('https://wallpaperaccess.com/full/759396.jpg') no-repeat center center/cover;
+      margin: 0;
+      padding: 0;
+    }
+    h1, p {
+      background: rgba(255,255,255,0.8);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .game-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 30px;
+      gap: 20px;
+    }
+    .words, .images {
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 90vw;
+    }
+    .word, .image-container {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .word {
+      background-color: #ffcc00;
+      font-weight: bold;
+      min-width: 60px;
+    }
+    .word.selected {
+      background-color: #ffa500;
+      outline: 2px solid #333;
+    }
+    .image-container {
+      border: 2px dashed #ddd;
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    button {
+      padding: 10px 15px;
+      margin-top: 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #feedback {
+      margin-top: 15px;
+      font-weight: bold;
+      color: darkblue;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔠 Word Matching Game</h1>
+<p>Drag or Tap to match the correct words to pictures!</p>
+
+<div class="game-container">
+  <div class="words">
+    <p class="word" draggable="true" id="word1">Dog</p>
+    <p class="word" draggable="true" id="word2">Sun</p>
+    <p class="word" draggable="true" id="word3">Apple</p>
+    <p class="word" draggable="true" id="word4">Car</p>
+    <p class="word" draggable="true" id="word5">Fish</p>
+    <p class="word" draggable="true" id="word6">Tree</p>
+  </div>
+
+  <div class="images">
+    <div class="image-container" id="drop3"><img src="apple.png" alt="Red Apple"></div>
+    <div class="image-container" id="drop1"><img src="https://th.bing.com/th/id/OIP.e3EBMqJm-4C1KDDqwX-qcQHaHa?w=189&h=189" alt="Cute Dog"></div>
+    <div class="image-container" id="drop5"><img src="https://th.bing.com/th/id/OIP.jqVeyqwsT3s6AZ_RttUWKAHaFs" alt="Swimming Fish"></div>
+    <div class="image-container" id="drop2"><img src="https://th.bing.com/th/id/OIP.X7Ny4J5Krer0T6PzJRQA4wHaH7" alt="Shining Sun"></div>
+    <div class="image-container" id="drop4"><img src="https://cdn5.vectorstock.com/i/1000x1000/37/29/cartoon-red-car-vector-5623729.jpg" alt="Red Car"></div>
+    <div class="image-container" id="drop6"><img src="https://static.vecteezy.com/system/resources/previews/008/132/083/original/green-tree-cartoon-isolated-on-white-background-illustration-of-green-tree-cartoon-free-vector.jpg" alt="Green Tree"></div>
+  </div>
+</div>
+
+<p id="feedback"></p>
+<button onclick="restartGame()">🔁 Restart Game</button>
+<button onclick="goBack()">🏠 Back to Home</button>
+
+<script>
+  let correctMatches = 0;
+  let selectedWord = null;
+
+  const correctPairs = {
+    "word1": "drop1", // Dog
+    "word2": "drop2", // Sun
+    "word3": "drop3", // Apple
+    "word4": "drop4", // Car
+    "word5": "drop5", // Fish
+    "word6": "drop6"  // Tree
+  };
+
+  // Desktop drag
+  document.querySelectorAll('.word').forEach(word => {
+    word.addEventListener('dragstart', dragStart);
+    word.addEventListener('click', tapSelect);
+  });
+
+  document.querySelectorAll('.image-container').forEach(image => {
+    image.addEventListener('dragover', allowDrop);
+    image.addEventListener('drop', dropWord);
+    image.addEventListener('click', tapDrop);
+  });
+
+  function dragStart(e) {
+    e.dataTransfer.setData("text", e.target.id);
+  }
+
+  function allowDrop(e) {
+    e.preventDefault();
+  }
+
+  function dropWord(e) {
+    e.preventDefault();
+    const wordId = e.dataTransfer.getData("text");
+    handleMatch(wordId, e.currentTarget.id);
+  }
+
+  function tapSelect(e) {
+    document.querySelectorAll('.word').forEach(w => w.classList.remove('selected'));
+    selectedWord = e.target;
+    selectedWord.classList.add('selected');
+  }
+
+  function tapDrop(e) {
+    if (!selectedWord) return;
+    const wordId = selectedWord.id;
+    const dropId = e.currentTarget.id;
+    handleMatch(wordId, dropId);
+  }
+
+  function handleMatch(wordId, dropId) {
+    if (correctPairs[wordId] === dropId) {
+      const dropBox = document.getElementById(dropId);
+      const word = document.getElementById(wordId);
+      dropBox.appendChild(word);
+      word.classList.remove('selected');
+      word.draggable = false;
+      word.style.cursor = 'default';
+      selectedWord = null;
+      correctMatches++;
+      if (correctMatches === 6) {
+        document.getElementById("feedback").innerText = "🎉 Well Done! You matched all words!";
+      } else {
+        document.getElementById("feedback").innerText = "✅ Correct! Keep going.";
+      }
+    } else {
+      document.getElementById("feedback").innerText = "❌ Oops! That's not the match.";
+    }
+  }
+
+  function restartGame() {
+    location.reload();
+  }
+
+  function goBack() {
+    window.location.href = "englishgamelandingpage.html";
+  }
+</script>
+
+</body>
+</html>

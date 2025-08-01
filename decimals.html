@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Decimals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .quiz-box, .drag-drop-box {
+            border: 2px solid #000;
+            padding: 15px;
+            display: inline-block;
+            background-color: #fff;
+        }
+        .drag-box {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            background-color: #ddd;
+            cursor: grab;
+            border-radius: 5px;
+        }
+        .drop-box {
+            width: 150px;
+            height: 50px;
+            border: 2px dashed #000;
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            vertical-align: middle;
+        }
+        .wrong {
+            background-color: #ff6666 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video Lesson -->
+    <section class="video-lesson fade-in">
+        <h2>🎥 Watch & Learn</h2>
+        <p>Watch this video to learn about decimals.</p>
+        <iframe width="560" height="315"
+            src="https://www.youtube.com/embed/3UDQjMZNbew"
+            title="Decimals for Kids" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </section>
+
+    <!-- Explanation -->
+    <section class="explanation fade-in">
+        <h2>What Are Decimals?</h2>
+        <p>Decimals are numbers with a **dot (.)** that show parts of a whole.</p>
+        <p>Example: **0.5** means half of something.</p>
+    </section>
+
+    <!-- Question -->
+    <section class="question fade-in">
+        <h2>📝 Solve This</h2>
+        <p>Which decimal represents **one and a half**?</p>
+        <input type="text" id="decimal-answer" placeholder="Your answer">
+        <button onclick="checkAnswer()">Check</button>
+        <p id="answer-result"></p>
+    </section>
+
+    <!-- Quiz -->
+    <section class="quiz fade-in">
+        <h2>🎯 Decimals Quiz</h2>
+        <p>What is **0.75** in fraction form?</p>
+        <div class="quiz-box">
+            <input type="radio" name="quiz" value="1/4"> 1/4 <br>
+            <input type="radio" name="quiz" value="3/4"> 3/4 <br>
+            <input type="radio" name="quiz" value="1/2"> 1/2 <br>
+            <button onclick="checkQuiz()">Submit</button>
+            <p id="quiz-result"></p>
+        </div>
+    </section>
+
+    <!-- Drag-and-Drop Game -->
+    <section class="drag-drop fade-in">
+        <h2>🎮 Match the Decimals</h2>
+        <p>Drag the decimal number to its correct fraction representation.</p>
+        <div class="drag-drop-box">
+            <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag1" data-answer="1/2">0.5</div>
+            <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag2" data-answer="3/4">0.75</div>
+            <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag3" data-answer="1/4">0.25</div>
+            <br><br>
+            <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '1/2')">1/2</div>
+            <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '3/4')">3/4</div>
+            <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, '1/4')">1/4</div>
+        </div>
+        <br>
+        <button onclick="resetGame()">🔄 Remove Incorrect Pair</button>
+        <p id="game-result"></p>
+    </section>
+
+    <script>
+        function checkAnswer() {
+            let answer = document.getElementById("decimal-answer").value;
+            let result = document.getElementById("answer-result");
+            if (answer === "1.5") {
+                result.innerHTML = "✅ Correct! 1.5 means one and a half.";
+                result.style.color = "green";
+            } else {
+                result.innerHTML = "❌ Try again!";
+                result.style.color = "red";
+            }
+        }
+
+        function checkQuiz() {
+            let options = document.getElementsByName("quiz");
+            let result = document.getElementById("quiz-result");
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].checked && options[i].value === "3/4") {
+                    result.innerHTML = "✅ Correct!";
+                    result.style.color = "green";
+                    return;
+                }
+            }
+            result.innerHTML = "❌ Try again!";
+            result.style.color = "red";
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event, correctAnswer) {
+            event.preventDefault();
+            let draggedId = event.dataTransfer.getData("text");
+            let draggedElement = document.getElementById(draggedId);
+            let droppedValue = event.target.innerHTML.trim();
+
+            if (draggedElement.getAttribute("data-answer") === correctAnswer) {
+                event.target.appendChild(draggedElement);
+                draggedElement.style.cursor = "default";
+                draggedElement.draggable = false;
+                document.getElementById("game-result").innerHTML = "✅ Correct Match!";
+                document.getElementById("game-result").style.color = "green";
+            } else {
+                document.getElementById("game-result").innerHTML = "❌ Wrong! Try again.";
+                document.getElementById("game-result").style.color = "red";
+                event.target.classList.add("wrong");
+                setTimeout(() => {
+                    event.target.classList.remove("wrong");
+                }, 1000);
+            }
+        }
+
+        function resetGame() {
+            let dropBoxes = document.querySelectorAll(".drop-box");
+
+            dropBoxes.forEach(box => {
+                let item = box.querySelector(".drag-box");
+                if (item) {
+                    item.draggable = true;
+                    item.style.cursor = "grab";
+                    document.querySelector(".drag-drop-box").appendChild(item);
+                }
+            });
+
+            document.getElementById("game-result").innerHTML = "";
+        }
+    </script>
+
+</body>
+</html> 

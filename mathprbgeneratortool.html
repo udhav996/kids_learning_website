@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Problem Generator</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #8EC5FC, #E0C3FC);
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            margin: 50px auto;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        h1 { font-size: 26px; color: #ff5722; }
+        select, input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        button:hover { background: #218838; }
+        #feedback { font-weight: bold; font-size: 18px; }
+        .timer { font-size: 20px; color: #d9534f; font-weight: bold; }
+        #celebration {
+            display: none;
+            font-size: 30px;
+            color: gold;
+            animation: pop 0.5s infinite alternate;
+        }
+        @keyframes pop {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background: #28a745;
+            border-radius: 20px;
+            transition: width 0.5s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Math Game 🎮</h1>
+        <label for="difficulty">Choose Difficulty:</label>
+        <select id="difficulty">
+            <option value="easy">Easy (1-10)</option>
+            <option value="medium">Medium (10-15)</option>
+            <option value="hard">Hard (15-20)</option>
+        </select>
+
+        <div id="questionBox">
+            <p id="question"></p>
+            <input type="number" id="answerInput" placeholder="Your Answer">
+            <button onclick="checkAnswer()">Submit</button>
+            <p id="feedback"></p>
+        </div>
+
+        <p>Correct Answers: <span id="score">0</span> / 10</p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <p class="timer">Time Left: <span id="timer">120</span> sec</p>
+
+        <p id="celebration">🎉🎊 YOU WON! PERFECT SCORE! 🎊🎉</p>
+    </div>
+
+    <audio id="correctSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+    <audio id="wrongSound" src="https://www.fesliyanstudios.com/play-mp3/338"></audio>
+
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        let score = 0;
+        let questionCount = 0;
+        let num1, num2, correctAnswer;
+        let timeLeft = 120;
+        let timerInterval;
+        let operations = ["+", "-", "*", "/"];
+
+        document.getElementById("difficulty").addEventListener("change", function() {
+            resetGame();
+        });
+
+        function generateQuestion() {
+    let difficulty = document.getElementById("difficulty").value;
+    let rangeMin, rangeMax;
+
+    if (difficulty === "easy") {
+        rangeMin = 1;
+        rangeMax = 10;   // Simple numbers
+    } else if (difficulty === "medium") {
+        rangeMin = 10;
+        rangeMax = 15;   // Slightly harder, but not extreme
+    } else {
+        rangeMin = 15;
+        rangeMax = 20;   // Harder, but not too complex
+    }
+
+    num1 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+    num2 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+    let operation = operations[Math.floor(Math.random() * operations.length)];
+
+    if (operation === "/") {
+        num1 = num1 * num2;  // Ensure division results in whole numbers
+    }
+
+    correctAnswer = eval(`${num1} ${operation} ${num2}`);
+    correctAnswer = Math.round(correctAnswer * 100) / 100; // Round for decimal cases
+
+    document.getElementById("question").innerText = `${num1} ${operation} ${num2} = ?`;
+    document.getElementById("answerInput").value = "";
+    document.getElementById("feedback").innerText = "";
+} 
+
+        function checkAnswer() {
+            let userAnswer = parseFloat(document.getElementById("answerInput").value);
+            let feedback = document.getElementById("feedback");
+            let correctSound = document.getElementById("correctSound");
+            let wrongSound = document.getElementById("wrongSound");
+
+            if (userAnswer === correctAnswer) {
+                score++;
+                feedback.innerText = "🎉 Correct! Great job!";
+                feedback.style.color = "green";
+                correctSound.play();
+            } else {
+                feedback.innerText = "❌ Oops! Try again.";
+                feedback.style.color = "red";
+                wrongSound.play();
+            }
+
+            questionCount++;
+            document.getElementById("score").innerText = `${score} / 10`;
+
+            // Update Progress Bar
+            let progress = (questionCount / 10) * 100;
+            document.getElementById("progressBar").style.width = `${progress}%`;
+
+            if (questionCount < 10) {
+                setTimeout(generateQuestion, 1000);
+            } else {
+                clearInterval(timerInterval);
+                if (score === 10) {
+                    document.getElementById("celebration").style.display = "block";
+                } else {
+                    alert(`Game Over! You got ${score} correct.`);
+                }
+                setTimeout(resetGame, 3000);
+            }
+        }
+
+        function resetGame() {
+            score = 0;
+            questionCount = 0;
+            timeLeft = 120;
+            document.getElementById("score").innerText = "0 / 10";
+            document.getElementById("timer").innerText = timeLeft;
+            document.getElementById("celebration").style.display = "none";
+            document.getElementById("progressBar").style.width = "0%";
+            startTimer();
+            generateQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert(`Time's up! You got ${score} correct.`);
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        window.onload = () => { resetGame(); };
+
+        function goBack() {
+            window.location.href = "mathcodemaster.html"; // Redirects to homepage
+        }
+    </script>
+</body>
+</html> 

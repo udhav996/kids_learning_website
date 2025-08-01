@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Puzzle Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .game-container { background: #fff; padding: 20px; border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 80%; margin: auto; margin-top: 20px; }
+        .puzzle { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        input { font-size: 18px; padding: 5px; text-align: center; width: 50px; }
+        button { padding: 10px; margin: 10px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 5px; }
+        .feedback { font-size: 20px; margin-top: 10px; }
+        .timer { font-size: 20px; font-weight: bold; color: red; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>🧩 Math Puzzle Game</h1>
+    <p>Solve 20 random math puzzles before time runs out! ⏳ <span class="timer" id="time-left">2:00</span></p>
+
+    <div class="game-container">
+        <p class="puzzle" id="puzzle"></p>
+        <input type="number" id="answer" placeholder="?" />
+        <button onclick="checkAnswer()">Submit</button>
+        <p class="feedback" id="feedback"></p>
+        <button onclick="nextQuestion()">🔄 Next Question</button>
+        <p>Score: <span id="score">0</span> / 20</p>
+        <button id="restart-btn" onclick="startGame()" style="display:none;">🔄 Restart Game</button>
+    </div>
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let correctAnswer;
+        let timer;
+        let timeLeft = 120; // 2 minutes
+        let questions = [];
+
+        function generateQuestion() {
+            let num1 = Math.floor(Math.random() * 10) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            let operations = ["+", "-", "×", "÷"];
+            let operation = operations[Math.floor(Math.random() * 4)];
+
+            let result;
+            if (operation === "+") {
+                result = num1 + num2;
+            } else if (operation === "-") {
+                result = num1 - num2;
+            } else if (operation === "×") {
+                result = num1 * num2;
+            } else {
+                num1 = num2 * (Math.floor(Math.random() * 10) + 1); // Ensure it's divisible
+                result = num1 / num2;
+            }
+
+            let missing = Math.floor(Math.random() * 3); // Randomly hide a value
+            if (missing === 0) {
+                return { question: `? ${operation} ${num2} = ${result}`, answer: num1 };
+            } else if (missing === 1) {
+                return { question: `${num1} ${operation} ? = ${result}`, answer: num2 };
+            } else {
+                return { question: `${num1} ${operation} ${num2} = ?`, answer: result };
+            }
+        }
+
+        function startGame() {
+            clearInterval(timer);
+            questions = Array.from({ length: 20 }, () => generateQuestion());
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById("score").innerText = score;
+            document.getElementById("feedback").innerText = "";
+            document.getElementById("restart-btn").style.display = "none";
+            loadQuestion();
+            startTimer();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion < 20) {
+                document.getElementById("puzzle").innerHTML = questions[currentQuestion].question;
+                correctAnswer = questions[currentQuestion].answer; // Store correct answer
+                document.getElementById("answer").value = "";
+                document.getElementById("feedback").innerHTML = "";
+            } else {
+                endGame();
+            }
+        }
+
+        function checkAnswer() {
+            let userAnswer = parseFloat(document.getElementById("answer").value);
+            if (userAnswer === correctAnswer) {
+                document.getElementById("feedback").innerHTML = "✅ Correct!";
+                document.getElementById("feedback").style.color = "green";
+                score++;
+                document.getElementById("score").innerText = score;
+            } else {
+                document.getElementById("feedback").innerHTML = "❌ Incorrect! Try the next one.";
+                document.getElementById("feedback").style.color = "red";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 120;
+            document.getElementById("time-left").innerText = "2:00";
+
+            timer = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById("time-left").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame();
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            document.getElementById("puzzle").innerHTML = "🎉 Game Over!";
+            document.getElementById("feedback").innerHTML = score >= 15 ? "🏆 Well Done! You got 15+ correct!" : "❌ Try Again! Score at least 15 to win!";
+            document.getElementById("feedback").style.color = score >= 15 ? "green" : "red";
+            document.getElementById("score").innerText = `${score} / 20`;
+            document.getElementById("restart-btn").style.display = "block"; // Show restart button
+        }
+
+        startGame();
+
+        function goBack() {
+            window.location.href = "mathgamelandingpage.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html> 

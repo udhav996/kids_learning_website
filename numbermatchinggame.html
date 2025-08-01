@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Matching Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+    .game-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      width: 95%;
+      max-width: 1100px;
+      margin: 20px auto;
+    }
+    .drag-box, .drop-box {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px;
+      background-color: #ddd;
+      cursor: grab;
+      border-radius: 5px;
+      font-size: 16px;
+      min-width: 50px;
+      text-align: center;
+      user-select: none;
+    }
+    .drop-box {
+      width: auto;
+      min-width: 100px;
+      height: 50px;
+      border: 2px dashed #000;
+      background-color: #fff;
+      vertical-align: middle;
+    }
+    .dragging { background-color: lightgreen !important; }
+    .matched { background-color: lightblue !important; color: white; cursor: default; }
+    .wrong { background-color: #ff6666 !important; }
+    .selected { outline: 3px solid orange; }
+    button {
+      padding: 10px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .timer {
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
+      margin-top: 10px;
+    }
+    #drag-container, #drop-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔢 Number Matching Game</h1>
+  <p>Match 10 numbers with their words!<br><strong>Time Left: <span class="timer" id="time-left">1:00</span></strong></p>
+
+  <div class="game-container">
+    <div id="drag-container"></div>
+    <br />
+    <div id="drop-container"></div>
+  </div>
+
+  <button onclick="resetGame()">🔄 Reset Game</button>
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <p id="game-result"></p>
+
+  <script>
+    let numbers = [
+        { num: "1", word: "One" }, { num: "2", word: "Two" }, { num: "3", word: "Three" }, { num: "4", word: "Four" },
+        { num: "5", word: "Five" }, { num: "6", word: "Six" }, { num: "7", word: "Seven" }, { num: "8", word: "Eight" },
+        { num: "9", word: "Nine" }, { num: "10", word: "Ten" }
+    ];
+    let timer;
+    let timeLeft = 60; // 1 minute
+    let matchesMade = 0;
+    let selectedBox = null;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function setupGame() {
+        let dragContainer = document.getElementById("drag-container");
+        let dropContainer = document.getElementById("drop-container");
+
+        shuffle(numbers); // Shuffle numbers before displaying
+
+        dragContainer.innerHTML = "";
+        dropContainer.innerHTML = "";
+        document.getElementById("game-result").innerHTML = ""; // Reset message
+        matchesMade = 0;
+        selectedBox = null;
+
+        numbers.forEach(({ num, word }, index) => {
+            let dragBox = document.createElement("div");
+            dragBox.className = "drag-box";
+            dragBox.id = `drag${index}`;
+            dragBox.innerText = num;
+            dragBox.setAttribute("data-answer", word);
+            dragBox.draggable = true;
+            dragBox.ondragstart = drag;
+            dragBox.ondragend = () => dragBox.classList.remove("dragging");
+
+            // Tap for mobile
+            dragBox.addEventListener("click", handleBoxTap);
+
+            let dropBox = document.createElement("div");
+            dropBox.className = "drop-box";
+            dropBox.innerText = word;
+            dropBox.ondragover = allowDrop;
+            dropBox.ondrop = (event) => drop(event, word);
+
+            // Tap-drop logic for mobile
+            dropBox.addEventListener("click", () => {
+                if (selectedBox && !dropBox.querySelector('.drag-box')) {
+                    if (selectedBox.getAttribute("data-answer") === word) {
+                        dropBox.appendChild(selectedBox);
+                        selectedBox.classList.add("matched");
+                        selectedBox.draggable = false;
+                        selectedBox.style.cursor = "default";
+                        matchesMade++;
+                        selectedBox = null;
+                        document.querySelectorAll(".drag-box").forEach(b => b.classList.remove("selected"));
+
+                        if (matchesMade === 10) {
+                            clearInterval(timer);
+                            showMessage("🎉 You Win!", "green");
+                        } else {
+                            showMessage("✅ Great! Keep going.", "green");
+                        }
+                    } else {
+                        showMessage("❌ Wrong! Try again.", "red");
+                        dropBox.classList.add("wrong");
+                        setTimeout(() => dropBox.classList.remove("wrong"), 1000);
+                    }
+                }
+            });
+
+            dragContainer.appendChild(dragBox);
+            dropContainer.appendChild(dropBox);
+        });
+
+        startTimer(); // Start countdown timer
+    }
+
+    function handleBoxTap() {
+        if (this.classList.contains("matched")) return;
+        if (selectedBox && selectedBox !== this) selectedBox.classList.remove("selected");
+
+        selectedBox = this.classList.contains("selected") ? null : this;
+        this.classList.toggle("selected");
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timeLeft = 60;
+        document.getElementById("time-left").innerText = "1:00";
+
+        timer = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("time-left").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                showMessage("⏳ You Lose! Time's up!", "red");
+                disableAll();
+            }
+
+            timeLeft--;
+        }, 1000);
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
+        event.target.classList.add("dragging");
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drop(event, correctAnswer) {
+        event.preventDefault();
+        let draggedId = event.dataTransfer.getData("text");
+        let draggedElement = document.getElementById(draggedId);
+
+        if (draggedElement.getAttribute("data-answer") === correctAnswer) {
+            event.target.appendChild(draggedElement);
+            draggedElement.classList.add("matched");
+            draggedElement.draggable = false;
+            draggedElement.style.cursor = "default";
+
+            matchesMade++;
+
+            if (matchesMade === 10) {
+                clearInterval(timer);
+                showMessage("🎉 You Win!", "green");
+            } else {
+                showMessage("✅ Great! Keep going.", "green");
+            }
+        } else {
+            showMessage("❌ Wrong! Try again.", "red");
+            event.target.classList.add("wrong");
+            setTimeout(() => event.target.classList.remove("wrong"), 1000);
+        }
+    }
+
+    function disableAll() {
+        document.querySelectorAll(".drag-box").forEach(box => {
+            box.draggable = false;
+            box.style.cursor = "not-allowed";
+            box.classList.remove("selected");
+            box.removeEventListener("click", handleBoxTap);
+        });
+
+        document.querySelectorAll(".drop-box").forEach(drop => {
+            drop.replaceWith(drop.cloneNode(true)); // Remove all listeners
+        });
+    }
+
+    function resetGame() {
+        clearInterval(timer);
+        setupGame();
+    }
+
+    function showMessage(text, color) {
+        let msg = document.getElementById("game-result");
+        msg.innerHTML = text;
+        msg.style.color = color;
+    }
+
+    function goBack() {
+        window.location.href = "mathgamelandingpage.html";
+    }
+
+    setupGame(); // Run at start
+</script>
+
+</body>
+</html>

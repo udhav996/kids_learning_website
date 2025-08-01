@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn Subtraction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      display: inline-block;
+    }
+
+    button:hover {
+      background-color: #1e7e34;
+    }
+
+    .btn-back {
+      background-color: #007bff;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+
+    .basket {
+      width: 200px;
+      height: 150px;
+      border: 2px dashed #000;
+      display: inline-block;
+      margin: 15px auto;
+      padding: 10px;
+      background-color: #fff;
+    }
+
+    .apple {
+      font-size: 30px;
+      display: inline-block;
+      cursor: grab;
+      margin: 5px;
+    }
+
+    input {
+      padding: 10px;
+      width: 60px;
+      font-size: 16px;
+    }
+
+    #game-result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .video-lesson iframe {
+      width: 90%;
+      max-width: 700px;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .apple-container {
+      max-width: 95%;
+      margin: 10px auto;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .selected {
+      outline: 3px solid gold;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .basket {
+        width: 90%;
+      }
+
+      .apple {
+        font-size: 26px;
+      }
+
+      button {
+        font-size: 15px;
+        padding: 10px 14px;
+        margin: 8px 4px;
+      }
+
+      input {
+        width: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video Lesson -->
+  <section class="video-lesson fade-in">
+    <h2>🎥 Watch & Learn</h2>
+    <p>Watch this video to learn subtraction.</p>
+    <iframe src="https://www.youtube.com/embed/ZygCUtAUWJA"
+      title="Subtraction for Kids"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+  </section>
+
+  <!-- Explanation -->
+  <section class="explanation fade-in">
+    <h2>What is Subtraction?</h2>
+    <p>Subtraction means taking away. For example, if you have 5 apples and eat 2, you have 3 apples left.</p>
+    <p>5 - 2 = 3</p>
+  </section>
+
+  <!-- Simple Question -->
+  <section class="question fade-in">
+    <h2>🧠 Try This</h2>
+    <p>What is 7 - 3?</p>
+    <input type="number" id="simple-answer" />
+    <button onclick="checkSimpleAnswer()">Check Answer</button>
+    <p id="simple-result"></p>
+  </section>
+
+  <!-- Quiz -->
+  <section class="quiz fade-in">
+    <h2>❓ Subtraction Quiz</h2>
+    <p>What is 9 - 4?</p>
+    <button onclick="checkQuiz(3)">3</button>
+    <button onclick="checkQuiz(5)">5</button>
+    <button onclick="checkQuiz(6)">6</button>
+    <p id="quiz-result"></p>
+  </section>
+
+  <!-- Drag-and-Drop Game -->
+  <section class="drag-drop fade-in">
+    <h2>🎮 Subtraction Game</h2>
+    <p>Drag OR tap 3 apples to the basket.</p>
+    <div class="basket" id="basket" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    
+    <div class="apple-container" id="apples-container">
+      <span class="apple" draggable="true" ondragstart="drag(event)" id="apple1">🍏</span>
+      <span class="apple" draggable="true" ondragstart="drag(event)" id="apple2">🍏</span>
+      <span class="apple" draggable="true" ondragstart="drag(event)" id="apple3">🍏</span>
+      <span class="apple" draggable="true" ondragstart="drag(event)" id="apple4">🍏</span>
+      <span class="apple" draggable="true" ondragstart="drag(event)" id="apple5">🍏</span>
+    </div>
+
+    <button onclick="removeApple()">❌ Remove an Apple</button>
+    <p id="game-result"></p>
+  </section>
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <!-- SCRIPT -->
+  <script>
+    function checkSimpleAnswer() {
+      let answer = document.getElementById("simple-answer").value;
+      let result = document.getElementById("simple-result");
+      if (answer == 4) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.innerHTML = "❌ Try again!";
+        result.style.color = "red";
+      }
+    }
+
+    function checkQuiz(answer) {
+      let result = document.getElementById("quiz-result");
+      if (answer === 5) {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.innerHTML = "❌ Wrong, try again!";
+        result.style.color = "red";
+      }
+    }
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+
+    // Drag-and-drop + tap
+    let appleCount = 0;
+    let selectedApple = null;
+    const isMobile = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const appleId = ev.dataTransfer.getData("text");
+      const apple = document.getElementById(appleId);
+      const basket = document.getElementById("basket");
+
+      if (apple && !apple.classList.contains("in-basket")) {
+        basket.appendChild(apple);
+        apple.draggable = false;
+        apple.style.cursor = "default";
+        apple.classList.add("in-basket");
+        appleCount++;
+        checkGameResult();
+      }
+    }
+
+    function removeApple() {
+      const basket = document.getElementById("basket");
+      const apples = basket.getElementsByClassName("apple");
+
+      if (apples.length > 0) {
+        const lastApple = apples[apples.length - 1];
+        document.getElementById("apples-container").appendChild(lastApple);
+        lastApple.draggable = true;
+        lastApple.style.cursor = "grab";
+        lastApple.classList.remove("in-basket");
+        appleCount--;
+        checkGameResult();
+      }
+    }
+
+    function checkGameResult() {
+      const result = document.getElementById("game-result");
+
+      if (appleCount === 3) {
+        result.innerHTML = "✅ Great job! You moved 3 apples.";
+        result.style.color = "green";
+      } else if (appleCount > 3) {
+        result.innerHTML = "❌ Too many apples! Remove some.";
+        result.style.color = "red";
+      } else {
+        result.innerHTML = "";
+      }
+    }
+
+    // Mobile tap-to-drop support
+    if (isMobile) {
+      document.querySelectorAll(".apple").forEach(el => {
+        el.setAttribute("draggable", "false");
+        el.addEventListener("click", () => {
+          if (!el.classList.contains("in-basket")) {
+            document.getElementById("basket").appendChild(el);
+            el.classList.add("in-basket");
+            el.style.cursor = "default";
+            appleCount++;
+            checkGameResult();
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn Shapes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #1e7e34;
+    }
+
+    .btn-back {
+      background-color: #007bff;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .video-lesson iframe {
+      width: 90%;
+      max-width: 600px;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .quiz-box, .drag-drop-box {
+      border: 2px solid #000;
+      padding: 15px;
+      display: inline-block;
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .drag-box {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #ddd;
+      cursor: grab;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+
+    .drop-box {
+      width: 120px;
+      height: 50px;
+      border: 2px dashed #000;
+      margin: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+      vertical-align: middle;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .wrong {
+      background-color: #ff6666 !important;
+    }
+
+    .selected {
+      outline: 3px solid gold;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .drag-drop-box {
+        width: 60%;
+      }
+
+      .drag-box, .drop-box {
+        display: block;
+        width: 50%;
+        margin: 10px auto;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video Lesson -->
+  <section class="video-lesson fade-in">
+    <h2>🎥 Watch & Learn</h2>
+    <p>Watch this video to learn about shapes.</p>
+    <iframe src="https://www.youtube.com/embed/ohaXcHwUWY0"
+      title="Shapes for Kids"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+  </section>
+
+  <!-- Explanation -->
+  <section class="explanation fade-in">
+    <h2>What Are Shapes?</h2>
+    <p>Shapes are everywhere! Some common shapes are:</p>
+    <ul>
+      <li>🔺 Triangle</li>
+      <li>⭕ Circle</li>
+      <li>⬛ Square</li>
+      <li>📏 Rectangle</li>
+    </ul>
+  </section>
+
+  <!-- Question -->
+  <section class="question fade-in">
+    <h2>📝 Identify the Shape</h2>
+    <p>What is the name of this shape? ⭕</p>
+    <input type="text" id="shape-answer" placeholder="Your answer">
+    <button onclick="checkAnswer()">Check</button>
+    <p id="answer-result"></p>
+  </section>
+
+  <!-- Quiz -->
+  <section class="quiz fade-in">
+    <h2>🎯 Shapes Quiz</h2>
+    <p>Which shape has 3 sides?</p>
+    <div class="quiz-box">
+      <input type="radio" name="quiz" value="Square"> Square <br>
+      <input type="radio" name="quiz" value="Circle"> Circle <br>
+      <input type="radio" name="quiz" value="Triangle"> Triangle <br>
+      <button onclick="checkQuiz()">Submit</button>
+      <p id="quiz-result"></p>
+    </div>
+  </section>
+
+  <!-- Drag-and-Drop Game -->
+  <section class="drag-drop fade-in">
+    <h2>🎮 Match the Shapes</h2>
+    <p>Drag or tap the shape to match it with its name.</p>
+    <div class="drag-drop-box" id="game-box">
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag1" data-answer="Triangle">🔺</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag2" data-answer="Square">⬛</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag3" data-answer="Circle">⭕</div>
+      <br><br>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Triangle')" data-answer="Triangle">Triangle</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Square')" data-answer="Square">Square</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Circle')" data-answer="Circle">Circle</div>
+    </div>
+    <br>
+    <button onclick="resetGame()">🔄 Reset Game</button>
+    <p id="game-result"></p>
+  </section>
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <script>
+    function checkAnswer() {
+      let answer = document.getElementById("shape-answer").value.toLowerCase();
+      let result = document.getElementById("answer-result");
+      if (answer === "circle") {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.innerHTML = "❌ Try again!";
+        result.style.color = "red";
+      }
+    }
+
+    function checkQuiz() {
+      let options = document.getElementsByName("quiz");
+      let result = document.getElementById("quiz-result");
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].checked && options[i].value === "Triangle") {
+          result.innerHTML = "✅ Correct!";
+          result.style.color = "green";
+          return;
+        }
+      }
+      result.innerHTML = "❌ Try again!";
+      result.style.color = "red";
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drop(event, correctAnswer) {
+      event.preventDefault();
+      let draggedId = event.dataTransfer.getData("text");
+      let draggedElement = document.getElementById(draggedId);
+
+      if (draggedElement && draggedElement.getAttribute("data-answer") === correctAnswer) {
+        event.target.innerHTML = "";
+        event.target.appendChild(draggedElement);
+        draggedElement.style.cursor = "default";
+        draggedElement.draggable = false;
+        document.getElementById("game-result").innerText = "✅ Correct Match!";
+        document.getElementById("game-result").style.color = "green";
+      } else {
+        document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+        document.getElementById("game-result").style.color = "red";
+        event.target.classList.add("wrong");
+        setTimeout(() => event.target.classList.remove("wrong"), 1000);
+      }
+    }
+
+    function resetGame() {
+      const drops = document.querySelectorAll(".drop-box");
+      const gameBox = document.getElementById("game-box");
+
+      drops.forEach(drop => {
+        const child = drop.querySelector(".drag-box");
+        if (child) {
+          gameBox.insertBefore(child, drop);
+          child.draggable = true;
+          child.style.cursor = "grab";
+        }
+        drop.innerHTML = drop.getAttribute("data-answer");
+      });
+
+      document.getElementById("game-result").innerText = "";
+    }
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+
+    // 👇 Mobile Tap-to-Match Support
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    let selectedDrag = null;
+
+    if (isMobile) {
+      document.querySelectorAll(".drag-box").forEach(el => {
+        el.setAttribute("draggable", "false");
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".drag-box").forEach(box => box.classList.remove("selected"));
+          el.classList.add("selected");
+          selectedDrag = el;
+        });
+      });
+
+      document.querySelectorAll(".drop-box").forEach(drop => {
+        drop.addEventListener("click", () => {
+          if (selectedDrag) {
+            if (selectedDrag.getAttribute("data-answer") === drop.getAttribute("data-answer")) {
+              drop.innerHTML = "";
+              drop.appendChild(selectedDrag);
+              selectedDrag.classList.remove("selected");
+              selectedDrag.style.cursor = "default";
+              selectedDrag = null;
+              document.getElementById("game-result").innerText = "✅ Correct Match!";
+              document.getElementById("game-result").style.color = "green";
+            } else {
+              drop.classList.add("wrong");
+              document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+              document.getElementById("game-result").style.color = "red";
+              setTimeout(() => drop.classList.remove("wrong"), 1000);
+            }
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

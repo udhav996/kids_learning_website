@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Exam</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { margin-top: 50px; }
+        button { padding: 10px 20px; font-size: 18px; margin: 10px; cursor: pointer; }
+        #difficulty-section { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>🎓 Welcome to the Exam</h1>
+
+    <!-- Subject Selection -->
+    <div class="container" id="subject-section">
+        <h2>Select a Subject</h2>
+        <button onclick="showDifficulty('math')">📐 Math</button>
+        <button onclick="showDifficulty('english')">🔤 English</button>
+    </div>
+
+    <!-- Difficulty Selection (Hidden by default) -->
+    <div class="container" id="difficulty-section">
+        <h2 id="subject-title"></h2>
+        <button id="easy-btn">Easy</button>
+        <button id="medium-btn">Medium</button>
+        <button id="hard-btn">Hard</button>
+        <br><br>
+        <button onclick="goBack()">⬅ Back</button>  
+    </div>
+
+<button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+5rdx
+    <script>
+        function showDifficulty(subject) {
+            document.getElementById("subject-section").style.display = "none"; // Hide subject selection
+            document.getElementById("difficulty-section").style.display = "block"; // Show difficulty section
+            document.getElementById("subject-title").innerText = subject === "math" ? "📐 Math Exam" : "🔤 English Exam";
+
+            // Set correct navigation links
+            if (subject === "math") {
+                document.getElementById("easy-btn").onclick = () => location.href = "matheasyexam.html";
+                document.getElementById("medium-btn").onclick = () => location.href = "mathmediumexam.html";
+                document.getElementById("hard-btn").onclick = () => location.href = "mathhardexam.html";
+            } else if (subject === "english") {
+                document.getElementById("easy-btn").onclick = () => location.href = "englisheasyexam.html";
+                document.getElementById("medium-btn").onclick = () => location.href = "englishmediumexam.html";
+                document.getElementById("hard-btn").onclick = () => location.href = "englishhardexam.html";
+            }
+        }
+
+        function goBack() {
+            document.getElementById("subject-section").style.display = "block"; // Show subject selection
+            document.getElementById("difficulty-section").style.display = "none"; // Hide difficulty section
+        }
+
+        function goBack() {
+            window.location.href = "mathcodemaster.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html>     

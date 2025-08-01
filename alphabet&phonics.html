@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alphabet Learning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding-bottom: 40px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 32px;
+      margin-top: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .video-container {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 560px;
+    }
+
+    iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 10px;
+      border: none;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 15px 0;
+    }
+
+    .alphabet-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 0 10px;
+    }
+
+    .letter-box {
+      width: 80px;
+      height: 100px;
+      background: #ffcc00;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease-in-out;
+      animation: slideUp 0.8s ease-in-out;
+    }
+
+    .letter-box:hover {
+      background: #ffaa00;
+      transform: scale(1.1);
+    }
+
+    .image-box {
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #word-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    #word-image {
+      max-width: 90%;
+      width: 200px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    .btn-back {
+      margin-top: 30px;
+      padding: 12px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-back:hover {
+      background: #0056b3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .letter-box {
+        width: 65px;
+        height: 85px;
+        font-size: 20px;
+      }
+
+      #word-title {
+        font-size: 20px;
+      }
+    }
+
+    
+  </style>
+</head>
+<body>
+
+  <h1>📖 Learn Alphabet A-Z</h1>
+
+  <!-- YouTube Video Section -->
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/hq3yfQnllfQ" allowfullscreen></iframe>
+  </div>
+
+  
+  <div class="image-box" id="image-box">
+    <h2 id="word-title">Click a letter!</h2>
+    <img id="word-image" src="" alt="Word Image" />
+  </div>
+
+  <p>Click on a letter to see an image!</p>
+
+  <div class="alphabet-container">
+    <!-- JavaScript will inject letters -->
+  </div>
+
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <script>
+    const letters = [
+      { letter: "A", word: "Apple", image: "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg" },
+      { letter: "B", word: "Ball", image: "https://th.bing.com/th/id/OIP.JHArEzsRK6hjnJ1sGFsjSQHaHZ?rs=1&pid=ImgDetMain" },
+      { letter: "C", word: "Cat", image: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg" },
+      { letter: "D", word: "Dog", image: "https://th.bing.com/th/id/OIP.vb-_oRJAyDvl-CkmOsBfQQHaHq?w=166&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" },
+      { letter: "E", word: "Elephant", image: "https://th.bing.com/th/id/OIP.VA6ym-wIZgKgOzQe7lD93wHaGv?w=211&h=192&c=7&r=0&o=5&dpr=1.5&pid=1.7" },
+      { letter: "F", word: "Fish", image: "https://th.bing.com/th/id/OIP.KSDilSkUeIoOt_54zHmLFgHaFE?w=273&h=186&c=7&r=0&o=5&dpr=1.5&pid=1.7" },
+      { letter: "G", word: "Grapes", image: "https://th.bing.com/th/id/OIP.6iml0EgoJuOrb1fbvwOtDgHaHN?rs=1&pid=ImgDetMain" },
+      { letter: "H", word: "Horse", image: "https://th.bing.com/th/id/OIP.KEv3fnteeniHAy2gD6N1OQHaFB?w=278&h=188&c=7&r=0&o=5&dpr=1.5&pid=1.7" },
+      { letter: "I", word: "Ice Cream", image: "https://th.bing.com/th/id/OIP._8u5HnYPWTW_WflB_BRW4AHaKV?rs=1&pid=ImgDetMain" },
+      { letter: "J", word: "Juice", image: "https://i.ytimg.com/vi/Lmb6EPHWzRI/maxresdefault.jpg" },
+      { letter: "K", word: "Kite", image: "https://th.bing.com/th/id/OIP.VfYF393z3ogsDCRLFc1oywHaGa?rs=1&pid=ImgDetMain" },
+      { letter: "L", word: "Lion", image: "https://th.bing.com/th/id/OIP.UArysOA7-WHyWEXq4YJC8QHaH9?rs=1&pid=ImgDetMain" },
+      { letter: "M", word: "Monkey", image: "https://img.freepik.com/premium-vector/m-monkey-alphabet-learning_249251-156.jpg?w=1480" },
+      { letter: "N", word: "Nest", image: "https://th.bing.com/th/id/OIP.2z9CtHMoAV404XI3WIEGEwHaFB?rs=1&pid=ImgDetMain" },
+      { letter: "O", word: "Orange", image: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Orange-Fruit-Pieces.jpg" },
+      { letter: "P", word: "Parrot", image: "https://th.bing.com/th/id/OIP.MBpGD72QrxwWTyXoUKimDwHaFB?rs=1&pid=ImgDetMain" },
+      { letter: "Q", word: "Queen", image: "https://thumbs.dreamstime.com/z/alphabet-q-queen-13467358.jpg" },
+      { letter: "R", word: "Rabbit", image: "https://th.bing.com/th/id/OIP.NBS4Yw3xABcS764BwAFLBAHaFy?rs=1&pid=ImgDetMain" },
+      { letter: "S", word: "Sun", image: "https://th.bing.com/th/id/OIP.FT63fAEPnZKyLp5zs9V9EAHaHa?rs=1&pid=ImgDetMain" },
+      { letter: "T", word: "Tiger", image: "https://th.bing.com/th/id/OIP.BGv2Gl9J_eJMl3s_MXEqyQHaH_?rs=1&pid=ImgDetMain" },
+      { letter: "U", word: "Umbrella", image: "https://th.bing.com/th/id/OIP.9ciLvPp0Z4d9RXgfKsRiDAHaFf?rs=1&pid=ImgDetMain" },
+      { letter: "V", word: "Van", image: "https://thumbs.dreamstime.com/b/illustration-isolated-alphabet-letter-v-van-283694204.jpg" },
+      { letter: "W", word: "Watch", image: "https://i.ytimg.com/vi/rYyy-ks410A/maxresdefault.jpg" },
+      { letter: "X", word: "Xylophone", image: "https://th.bing.com/th/id/OIP.pSWuNlMtTKN6376lOP8gAQHaHa?rs=1&pid=ImgDetMain" },
+      { letter: "Y", word: "Yacht", image: "https://c8.alamy.com/comp/KER7CG/illustration-of-a-letter-y-is-for-yacht-KER7CG.jpg" },
+      { letter: "Z", word: "Zebra", image: "https://th.bing.com/th/id/OIP.lQCZ0GM7OxopMx6wrhUgFQHaFB?rs=1&pid=ImgDetMain" }
+    ];
+
+    const alphabetContainer = document.querySelector(".alphabet-container");
+    const wordTitle = document.getElementById("word-title");
+    const wordImage = document.getElementById("word-image");
+    const imageBox = document.getElementById("image-box");
+
+    function showLetterDetails(letter) {
+      wordTitle.innerText = `${letter.letter} for ${letter.word}`;
+      wordImage.src = letter.image;
+      wordImage.style.display = "block";
+      imageBox.style.opacity = "1";
+    }
+
+    letters.forEach(letter => {
+      const letterBox = document.createElement("div");
+      letterBox.className = "letter-box";
+      letterBox.innerHTML = `<span>${letter.letter}</span>`;
+      letterBox.onclick = () => showLetterDetails(letter);
+      alphabetContainer.appendChild(letterBox);
+    });
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+  </script>
+</body>
+</html>

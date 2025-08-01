@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill in the Blanks Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+            background: url('https://th.bing.com/th/id/OIP.sZphzgagxMYE1bHFgiCsewHaEo?w=288&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') no-repeat center center/cover;
+
+        }
+        .game-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        .sentence {
+            margin: 15px 0;
+            font-size: 18px;
+            position: relative;
+            padding: 10px;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            width: 120px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #feedback {
+            font-size: 18px;
+            margin-top: 15px;
+            color: blue;
+        }
+        .hint {
+            display: none;
+            font-size: 14px;
+            color: gray;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .glow-correct {
+            border-color: green;
+            box-shadow: 0px 0px 10px green;
+        }
+        .shake-wrong {
+            border-color: red;
+            animation: shake 0.3s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📝 Fill in the Blanks</h1>
+    <p>Type the missing word in each sentence and check your answers.</p>
+
+    <div class="game-container" id="gameContainer">
+        <!-- Sentences will be inserted here dynamically -->
+    </div>
+
+    <button onclick="checkAnswers()">Check Answers</button>
+    <p id="feedback"></p>
+    <button onclick="restartGame()">Restart Game</button>
+
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        let sentences = [
+            { text: "The sun is very ___ ☀️", answer: "hot", hint: "(Hint: It feels very warm.)" },
+            { text: "bananas are ___ in color🍌", answer: "yellow", hint: "(Hint: not red, not blue.)" },
+            { text: "An apple is ___ in color. 🍎", answer: "red", hint: "(Hint: The color of a ripe apple.)" },
+            { text: "Fish live in ___ 🐠", answer: "water", hint: "(Hint: The place where fish swim.)" },
+            { text: "Trees give us ___ 🌳", answer: "oxygen", hint: "(Hint: The air we breathe.)" },
+            { text: "We write with a ___ ✏️", answer: "pencil", hint: "(Hint: Used for writing and drawing.)" },
+            { text: "The opposite of 'big' is ___", answer: "small", hint: "(Hint: Not big.)" },
+            { text: "Birds build their nests in ___ 🐦", answer: "tree", hint: "(Hint: Where birds live.)" },
+            { text: "The sky is ___ during the day. ☁️", answer: "blue", hint: "(Hint: Color of the clear sky.)" },
+            { text: "A dog has ___ legs 🐶", answer: "four", hint: "(Hint: more than two!.)" }
+        ];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function loadGame() {
+            let container = document.getElementById("gameContainer");
+            container.innerHTML = "";
+            shuffleArray(sentences);
+           
+            sentences.forEach((item, index) => {
+                let sentenceDiv = document.createElement("div");
+                sentenceDiv.classList.add("sentence");
+                sentenceDiv.innerHTML = `${index + 1}. ${item.text.replace("___", `<input type="text" id="q${index}" onfocus="showHint('hint${index}')" onblur="hideHint('hint${index}')">`)}
+                <div class="hint" id="hint${index}">${item.hint}</div>`;
+                container.appendChild(sentenceDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+
+            sentences.forEach((item, index) => {
+                let userInput = document.getElementById(`q${index}`).value.toLowerCase().trim();
+                let inputField = document.getElementById(`q${index}`);
+
+                if (userInput === item.answer) {
+                    inputField.classList.add("glow-correct");
+                    inputField.classList.remove("shake-wrong");
+                    correctCount++;
+                } else {
+                    inputField.classList.add("shake-wrong");
+                    inputField.classList.remove("glow-correct");
+                }
+            });
+
+            if (correctCount === sentences.length) {
+                document.getElementById("feedback").innerText = "🎉 Great job! You got all answers right!";
+            } else {
+                document.getElementById("feedback").innerText = "❌ Some answers are incorrect. Try again!";
+            }
+        }
+
+        function restartGame() {
+            document.getElementById("feedback").innerText = "";
+            loadGame();
+        }
+
+        function showHint(hintId) {
+            let hintElement = document.getElementById(hintId);
+            hintElement.style.display = "block";
+            hintElement.style.opacity = "1";
+        }
+
+        function hideHint(hintId) {
+            let hintElement = document.getElementById(hintId);
+            hintElement.style.opacity = "0";
+            setTimeout(() => {
+                hintElement.style.display = "none";
+            }, 500);
+        }
+
+        loadGame();
+
+        function goBack() {
+            window.location.href = "englishgamelandingpage.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html> 

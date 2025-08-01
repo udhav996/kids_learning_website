@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn Measurements</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #1e7e34;
+    }
+
+    .btn-back {
+      background-color: #007bff;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 180px;
+    }
+
+    .video-lesson iframe {
+      width: 90%;
+      max-width: 700px;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .quiz-box, .drag-drop-box {
+      border: 2px solid #000;
+      padding: 15px;
+      display: inline-block;
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .drag-box {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #ddd;
+      cursor: grab;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+
+    .drop-box {
+      width: 150px;
+      height: 50px;
+      border: 2px dashed #000;
+      margin: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+      vertical-align: middle;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .wrong {
+      background-color: #ff6666 !important;
+    }
+
+    .selected {
+      outline: 3px solid gold;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .drag-drop-box {
+        width: 60%;
+      }
+
+      .drag-box, .drop-box {
+        display: block;
+        width: 50%;
+        margin: 10px auto;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video Lesson -->
+  <section class="video-lesson fade-in">
+    <h2>🎥 Watch & Learn</h2>
+    <p>Watch this video to learn about measurements.</p>
+    <iframe src="https://www.youtube.com/embed/AVC-426M6V0"
+      title="Measurements for Kids"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+  </section>
+
+  <!-- Explanation -->
+  <section class="explanation fade-in">
+    <h2>What Are Measurements?</h2>
+    <p>We use measurements to find out <strong>length, weight, and volume</strong>.</p>
+    <ul>
+      <li>📏 <strong>Length</strong> – Measured in meters (m), centimeters (cm), or inches (in).</li>
+      <li>⚖️ <strong>Weight</strong> – Measured in grams (g), kilograms (kg), or pounds (lb).</li>
+      <li>🥛 <strong>Volume</strong> – Measured in liters (L) or milliliters (mL).</li>
+    </ul>
+  </section>
+
+  <!-- Question -->
+  <section class="question fade-in">
+    <h2>📝 Solve This</h2>
+    <p>What unit would you use to measure the length of a pencil?</p>
+    <input type="text" id="measurement-answer" placeholder="Your answer">
+    <button onclick="checkAnswer()">Check</button>
+    <p id="answer-result"></p>
+  </section>
+
+  <!-- Quiz -->
+  <section class="quiz fade-in">
+    <h2>🎯 Measurements Quiz</h2>
+    <p>What is the best unit to measure the weight of an apple?</p>
+    <div class="quiz-box">
+      <input type="radio" name="quiz" value="Liters"> Liters (L) <br>
+      <input type="radio" name="quiz" value="Grams"> Grams (g) <br>
+      <input type="radio" name="quiz" value="Meters"> Meters (m) <br>
+      <button onclick="checkQuiz()">Submit</button>
+      <p id="quiz-result"></p>
+    </div>
+  </section>
+
+  <!-- Drag-and-Drop Game -->
+  <section class="drag-drop fade-in">
+    <h2>🎮 Match the Measurements</h2>
+    <p>Drag or tap the object to its correct unit of measurement.</p>
+    <div class="drag-drop-box" id="game-box">
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag1" data-answer="Liters">🥛 Milk</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag2" data-answer="Grams">🍏 Apple</div>
+      <div class="drag-box" draggable="true" ondragstart="drag(event)" id="drag3" data-answer="Meters">📏 Ruler</div>
+      <br><br>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Liters')" data-answer="Liters">Liters (L)</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Grams')" data-answer="Grams">Grams (g)</div>
+      <div class="drop-box" ondragover="allowDrop(event)" ondrop="drop(event, 'Meters')" data-answer="Meters">Meters (m)</div>
+    </div>
+    <br>
+    <button onclick="resetGame()">🔄 Reset Game</button>
+    <p id="game-result"></p>
+  </section>
+
+  <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+  <script>
+    function checkAnswer() {
+      const answer = document.getElementById("measurement-answer").value.toLowerCase();
+      const result = document.getElementById("answer-result");
+      if (answer === "centimeters" || answer === "cm") {
+        result.innerHTML = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.innerHTML = "❌ Try again!";
+        result.style.color = "red";
+      }
+    }
+
+    function checkQuiz() {
+      const options = document.getElementsByName("quiz");
+      const result = document.getElementById("quiz-result");
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].checked && options[i].value === "Grams") {
+          result.innerHTML = "✅ Correct!";
+          result.style.color = "green";
+          return;
+        }
+      }
+      result.innerHTML = "❌ Try again!";
+      result.style.color = "red";
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drop(event, correctAnswer) {
+      event.preventDefault();
+      const draggedId = event.dataTransfer.getData("text");
+      const draggedElement = document.getElementById(draggedId);
+
+      if (draggedElement.getAttribute("data-answer") === correctAnswer) {
+        event.target.innerHTML = "";
+        event.target.appendChild(draggedElement);
+        draggedElement.style.cursor = "default";
+        draggedElement.draggable = false;
+        document.getElementById("game-result").innerText = "✅ Correct Match!";
+        document.getElementById("game-result").style.color = "green";
+      } else {
+        event.target.classList.add("wrong");
+        document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+        document.getElementById("game-result").style.color = "red";
+        setTimeout(() => event.target.classList.remove("wrong"), 1000);
+      }
+    }
+
+    function resetGame() {
+      const drops = document.querySelectorAll(".drop-box");
+      const gameBox = document.getElementById("game-box");
+
+      drops.forEach(drop => {
+        const child = drop.querySelector(".drag-box");
+        if (child) {
+          gameBox.insertBefore(child, drop);
+          child.draggable = true;
+          child.style.cursor = "grab";
+        }
+        drop.innerHTML = drop.getAttribute("data-answer");
+      });
+
+      document.getElementById("game-result").innerText = "";
+    }
+
+    function goBack() {
+      window.location.href = "mathcodemaster.html";
+    }
+
+    // Mobile Tap-to-Match
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    let selectedDrag = null;
+
+    if (isMobile) {
+      document.querySelectorAll(".drag-box").forEach(el => {
+        el.setAttribute("draggable", "false");
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".drag-box").forEach(box => box.classList.remove("selected"));
+          el.classList.add("selected");
+          selectedDrag = el;
+        });
+      });
+
+      document.querySelectorAll(".drop-box").forEach(drop => {
+        drop.addEventListener("click", () => {
+          if (selectedDrag) {
+            if (selectedDrag.getAttribute("data-answer") === drop.getAttribute("data-answer")) {
+              drop.innerHTML = "";
+              drop.appendChild(selectedDrag);
+              selectedDrag.classList.remove("selected");
+              selectedDrag.style.cursor = "default";
+              selectedDrag = null;
+              document.getElementById("game-result").innerText = "✅ Correct Match!";
+              document.getElementById("game-result").style.color = "green";
+            } else {
+              drop.classList.add("wrong");
+              document.getElementById("game-result").innerText = "❌ Wrong! Try again.";
+              document.getElementById("game-result").style.color = "red";
+              setTimeout(() => drop.classList.remove("wrong"), 1000);
+            }
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

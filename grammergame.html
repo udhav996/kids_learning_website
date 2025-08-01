@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Quiz Game</title>
+    <style>
+        /* 🎨 Fun Background */
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            text-align: center;
+            background: url('https://th.bing.com/th/id/R.ca0eb878815bf11788b42061762e9f1b?rik=9KDQ6XMUrFq%2bEQ&riu=http%3a%2f%2fclipart-library.com%2fimages%2f8TEb5Rxpc.jpg&ehk=7GfR8TW8f7SMTE9v%2b0YhvcXmbGzm3nvPrakXAcbQRGA%3d&risl=&pid=ImgRaw&r=0') no-repeat center center/cover;
+            color: white;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            margin: auto;
+            margin-top: 30px;
+            color: black;
+        }
+
+        /* ⏳ Timer Styling */
+        .timer { font-size: 20px; font-weight: bold; color: red; }
+
+        /* 🎮 Buttons */
+        button {
+            padding: 10px;
+            margin: 8px;
+            cursor: pointer;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        button:hover {
+            background-color: #f57c00;
+            transform: scale(1.1);
+        }
+
+        /* ✅ Correct & ❌ Wrong Styles */
+        .correct { background-color: #4CAF50 !important; }
+        .wrong { background-color: #FF5733 !important; }
+
+        /* Hidden Elements */
+        .hidden { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <h1>📚 Fun Grammar Quiz!</h1>
+    <p>Choose the correct answer before time runs out!</p>
+
+    <div class="quiz-container">
+        <p id="question"></p>
+        <p class="timer">⏳ Time Left: <span id="time-left">20</span> sec</p>
+        <p id="hint" style="color: blue; font-style: italic;"></p>
+        <button onclick="checkAnswer(0)" id="option0"></button>
+        <button onclick="checkAnswer(1)" id="option1"></button>
+        <button onclick="checkAnswer(2)" id="option2"></button>
+        <p id="feedback"></p>
+        <button onclick="nextQuestion()" id="next-btn" class="hidden">Next Question</button>
+    </div>
+
+    <h2 id="score" class="hidden"></h2>
+
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        const quizData = [
+            { question: "Which is a noun?", options: ["Run", "Table", "Quickly"], correct: 1, hint: "It's an object!" },
+            { question: "Which word is a verb?", options: ["Jump", "Happy", "Chair"], correct: 0, hint: "It shows an action!" },
+            { question: "What is the correct article: __ apple?", options: ["A", "An", "The"], correct: 1, hint: "Vowel rule!" },
+            { question: "Which is an adjective?", options: ["Soft", "Swim", "Tiger"], correct: 0, hint: "It describes something!" },
+            { question: "Choose the correct pronoun: __ am a student.", options: ["He", "She", "I"], correct: 2, hint: "Talking about yourself!" },
+            { question: "What is the past tense of 'go'?", options: ["Goed", "Went", "Gone"], correct: 1, hint: "Irregular verb!" },
+            { question: "Which is an adverb?", options: ["Slowly", "Lion", "Tree"], correct: 0, hint: "It describes a verb!" },
+            { question: "Which word is a plural noun?", options: ["Dog", "Cats", "Run"], correct: 1, hint: "More than one!" },
+            { question: "What is the opposite of 'big'?", options: ["Small", "Huge", "Fast"], correct: 0, hint: "Think of size!" },
+            { question: "Which sentence is correct?", options: ["She go to school.", "She goes to school.", "She going school."], correct: 1, hint: "Subject-verb agreement!" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let timer;
+        let timeLeft = 10;
+
+        function loadQuestion() {
+            document.getElementById("feedback").innerHTML = "";
+            document.getElementById("next-btn").classList.add("hidden");
+            answered = false;
+            timeLeft = 20;
+            document.getElementById("time-left").innerText = timeLeft;
+
+            if (currentQuestion < quizData.length) {
+                let q = quizData[currentQuestion];
+                document.getElementById("question").innerText = q.question;
+                document.getElementById("hint").innerText = "💡 Hint: " + q.hint;
+                document.getElementById("option0").innerText = q.options[0];
+                document.getElementById("option1").innerText = q.options[1];
+                document.getElementById("option2").innerText = q.options[2];
+
+                resetButtonStyles();
+                startTimer();
+            } else {
+                showResults();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("time-left").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer(-1);
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(selected) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timer);
+
+            let correct = quizData[currentQuestion].correct;
+            let buttons = document.querySelectorAll("button");
+           
+            if (selected === correct) {
+                document.getElementById("feedback").innerHTML = "✅ Correct!";
+                document.getElementById("feedback").style.color = "green";
+                buttons[selected].classList.add("correct");
+                score++;
+            } else {
+                document.getElementById("feedback").innerHTML = "❌ Wrong!";
+                document.getElementById("feedback").style.color = "red";
+                if (selected !== -1) buttons[selected].classList.add("wrong");
+                buttons[correct].classList.add("correct");
+            }
+
+            document.getElementById("next-btn").classList.remove("hidden");
+        }
+
+        function resetButtonStyles() {
+            let buttons = document.querySelectorAll("button");
+            buttons.forEach(btn => {
+                btn.classList.remove("correct", "wrong");
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById("question").innerHTML = "🎉 Quiz Completed!";
+            document.getElementById("score").classList.remove("hidden");
+            document.getElementById("score").innerText = `Your Score: ${score} / ${quizData.length}`;
+        }
+
+        loadQuestion();
+
+        function goBack() {
+            window.location.href = "englishgamelandingpage.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html> 

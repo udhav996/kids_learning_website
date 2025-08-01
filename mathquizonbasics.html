@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz with Timer & Certificate</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .quiz-container, .leaderboard, .certificate { background: #fff; padding: 20px; border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); width: 80%; margin: auto; margin-top: 20px; }
+        .timer { font-size: 20px; font-weight: bold; color: red; }
+        button { padding: 10px; margin: 5px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 5px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Math Quiz Challenge!</h1>
+    <p>Answer before time runs out!</p>
+
+    <div class="quiz-container">
+        <p id="question"></p>
+        <p class="timer">⏳ Time Left: <span id="time-left">10</span> sec</p>
+        <button onclick="checkAnswer(0)" id="option0"></button>
+        <button onclick="checkAnswer(1)" id="option1"></button>
+        <button onclick="checkAnswer(2)" id="option2"></button>
+        <p id="feedback"></p>
+        <button onclick="nextQuestion()" id="next-btn" class="hidden">Next Question</button>
+    </div>
+
+    <h2 id="score" class="hidden"></h2>
+
+    <div class="leaderboard">
+        <h2>🏆 Leaderboard</h2>
+        <ol id="leaderboard-list"></ol>
+    </div>
+
+    <div id="certificate-section" class="certificate hidden">
+        <h2>🏅 Congratulations!</h2>
+        <p>You scored 15 or more! Download your certificate below:</p>
+        <button onclick="downloadCertificate()">📜 Download Certificate</button>
+        <canvas id="certificateCanvas" width="600" height="400" class="hidden"></canvas>
+    </div>
+
+    <button class="btn-back" onclick="goBack()">🏠 Back to Home</button>
+
+    <script>
+        const quizData = [
+            { question: "What is 5 + 3?", options: ["6", "8", "9"], correct: 1 },
+            { question: "What is 10 ÷ 2?", options: ["3", "4", "5"], correct: 2 },
+            { question: "What fraction represents half?", options: ["1/3", "1/2", "1/4"], correct: 1 },
+            { question: "What is 9 × 9?", options: ["72", "81", "99"], correct: 1 },
+            { question: "What is 100 cm in meters?", options: ["1m", "10m", "100m"], correct: 0 },
+            { question: "What is 7 × 6?", options: ["36", "42", "48"], correct: 1 },
+            { question: "What is 5 × 8?", options: ["30", "40", "35"], correct: 1 },
+            { question: "What is 12 ÷ 4?", options: ["4", "3", "6"], correct: 1 },
+            { question: "Which shape has 3 sides?", options: ["Circle", "Square", "Triangle"], correct: 2 },
+            { question: "How many meters in a kilometer?", options: ["100", "500", "1000"], correct: 2 },
+            { question: "What is 1/4 as a decimal?", options: ["0.75", "0.50", "0.25"], correct: 2 },
+            { question: "What is 6 × 8?", options: ["42", "48", "50"], correct: 1 },
+            { question: "What is 14 ÷ 2?", options: ["6", "8", "7"], correct: 2 },
+            { question: "What is 25% of 200?", options: ["50", "25", "75"], correct: 0 },
+            { question: "Which measurement is used for weight?", options: ["Kilograms", "Liters", "Meters"], correct: 0 },
+            { question: "What is 3/4 as a decimal?", options: ["0.25", "0.75", "0.5"], correct: 1 },
+            { question: "Which shape has no corners?", options: ["Triangle", "Circle", "Rectangle"], correct: 1 },
+            { question: "What is 5.5 as a fraction?", options: ["11/2", "5/2", "3/2"], correct: 0 },
+            { question: "How many degrees in a full circle?", options: ["90°", "180°", "360°"], correct: 2 },
+            { question: "What is 15% of 300?", options: ["30", "45", "60"], correct: 1 }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let timer;
+        let timeLeft = 10;
+
+        function loadQuestion() {
+            document.getElementById("feedback").innerHTML = "";
+            document.getElementById("next-btn").classList.add("hidden");
+            answered = false;
+            timeLeft = 20;
+            document.getElementById("time-left").innerText = timeLeft;
+
+            if (currentQuestion < quizData.length) {
+                let q = quizData[currentQuestion];
+                document.getElementById("question").innerText = q.question;
+                document.getElementById("option0").innerText = q.options[0];
+                document.getElementById("option1").innerText = q.options[1];
+                document.getElementById("option2").innerText = q.options[2];
+
+                startTimer();
+            } else {
+                showResults();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("time-left").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer(-1);
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(selected) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timer);
+
+            let correct = quizData[currentQuestion].correct;
+            if (selected === correct) {
+                document.getElementById("feedback").innerHTML = "✅ Correct!";
+                document.getElementById("feedback").style.color = "green";
+                score++;
+            } else {
+                document.getElementById("feedback").innerHTML = "❌ Wrong or Time's up!";
+                document.getElementById("feedback").style.color = "red";
+            }
+
+            document.getElementById("next-btn").classList.remove("hidden");
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById("question").innerHTML = "🎉 Quiz Completed!";
+            document.getElementById("score").classList.remove("hidden");
+            document.getElementById("score").innerText = `Your Score: ${score} / 20`;
+
+            if (score >= 15) {
+                document.getElementById("certificate-section").classList.remove("hidden");
+            }
+        }
+
+        function downloadCertificate() {
+            let canvas = document.getElementById("certificateCanvas");
+            let ctx = canvas.getContext("2d");
+            ctx.fillStyle = "lightblue";
+            ctx.fillRect(0, 0, 600, 400);
+            ctx.fillStyle = "black";
+            ctx.font = "30px Arial";
+            ctx.fillText("🏅 Certificate of Achievement", 120, 100);
+            ctx.font = "20px Arial";
+            ctx.fillText(`Awarded to: ${prompt("Enter your name")}`, 150, 200);
+            ctx.fillText("For scoring 15+ in the Math Quiz", 120, 250);
+
+            let link = document.createElement("a");
+            link.download = "certificate.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        loadQuestion();
+
+        function goBack() {
+            window.location.href = "mathcodemaster.html"; // Redirects to homepage
+        }
+    </script>
+
+</body>
+</html> 

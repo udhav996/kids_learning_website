@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Easy Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        .question {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+        #timer {
+            font-size: 20px;
+            font-weight: bold;
+            color: red;
+        }
+        #submit, #home {
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #home {
+            background: #007bff;
+            display: none;
+        }
+        .celebration {
+            display: none;
+            font-size: 22px;
+            color: green;
+            font-weight: bold;
+        }
+        #score {
+            display: none;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>English Easy Exam</h2>
+        <p id="timer">Time Left: 60s</p>
+
+        <div id="questions">
+            <div class="question">
+                <p>1. What is the plural of 'cat'?</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="Cats"> Cats</label>
+                    <label><input type="radio" name="q1" value="Cat"> Cat</label>
+                    <label><input type="radio" name="q1" value="Cates"> Cates</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>2. Fill in the blank: The sun is very ____ today.</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="Bright"> Bright</label>
+                    <label><input type="radio" name="q2" value="Small"> Small</label>
+                    <label><input type="radio" name="q2" value="Dark"> Dark</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>3. Which word is a noun?</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="Run"> Run</label>
+                    <label><input type="radio" name="q3" value="Dog"> Dog</label>
+                    <label><input type="radio" name="q3" value="Jump"> Jump</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>4. What is the opposite of 'Happy'?</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="Sad"> Sad</label>
+                    <label><input type="radio" name="q4" value="Excited"> Excited</label>
+                    <label><input type="radio" name="q4" value="Glad"> Glad</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>5. Choose the correct sentence:</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="She is playing."> She is playing.</label>
+                    <label><input type="radio" name="q5" value="She are playing."> She are playing.</label>
+                    <label><input type="radio" name="q5" value="She am playing."> She am playing.</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>6. What sound does a dog make?</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="Bark"> Bark</label>
+                    <label><input type="radio" name="q6" value="Meow"> Meow</label>
+                    <label><input type="radio" name="q6" value="Moo"> Moo</label>
+                </div>
+            </div>
+        </div>
+
+        <button id="submit" onclick="checkAnswers()">Submit</button>
+        <p id="score"></p>
+        <p class="celebration" id="celebration">🎉 Congratulations! You completed the exam! 🎉</p>
+        <button id="home" onclick="goHome()">Go Back Home</button>
+    </div>
+
+    <script>
+        let timer = 60;
+        let interval = setInterval(function () {
+            document.getElementById("timer").innerText = "Time Left: " + timer + "s";
+            timer--;
+            if (timer < 0) {
+                clearInterval(interval);
+                checkAnswers();
+            }
+        }, 1000);
+
+        function checkAnswers() {
+            let correctAnswers = {
+                q1: "Cats",
+                q2: "Bright",
+                q3: "Dog",
+                q4: "Sad",
+                q5: "She is playing.",
+                q6: "Bark"
+            };
+
+            let score = 0;
+            let totalQuestions = 6;
+            for (let i = 1; i <= totalQuestions; i++) {
+                let selectedAnswer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[`q${i}`]) {
+                    score++;
+                }
+            }
+
+            document.getElementById("questions").style.display = "none";
+            document.getElementById("submit").style.display = "none";
+            document.getElementById("celebration").style.display = "block";
+            document.getElementById("home").style.display = "block";
+            document.getElementById("score").style.display = "block";
+            document.getElementById("score").innerText = `Your Score: ${score} / ${totalQuestions}`;
+        }
+
+        function goHome() {
+            window.location.href = "examhome.html"; // Change to your home page URL
+        }
+    </script>
+
+</body>
+</html> 
