@@ -14,7 +14,6 @@ document.querySelectorAll('.quiz-card').forEach(card => {
 document.addEventListener("DOMContentLoaded", function () {
     const cartoon = document.getElementById("cartoon");
     const links = document.querySelectorAll(".nav-link");
-    let idleTimer;
 
     const expressions = {
         home: "happy.gif",
@@ -40,12 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
         angry: "angry.gif"
     };
 
+    let lastActivityTime = Date.now();  // Track last interaction
+    let currentExpression = "happy.gif"; // Default expression
+    let isSleeping = false;
+
     function setExpression(expression) {
-        clearTimeout(idleTimer);
+        currentExpression = expression;
         cartoon.src = expression;
-        idleTimer = setTimeout(() => {
-            cartoon.src = expressions.sleepy;
-        }, 4000);
+        lastActivityTime = Date.now();
+        isSleeping = false;
     }
 
     function moveCartoon(target, expression) {
@@ -62,31 +64,36 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Move to default active link on page load
-    let activeLink = document.querySelector(".nav-link.active");
+    // Move to active menu at start
+    const activeLink = document.querySelector(".nav-link.active");
     if (activeLink) moveCartoon(activeLink, expressions.home);
 
-    // Hover + click on menu items
+    // Menu hover/click
     links.forEach(link => {
         link.addEventListener("mouseenter", function () {
-            let menuId = link.innerText.toLowerCase();
+            const menuId = link.innerText.toLowerCase();
             moveCartoon(link, expressions[menuId] || expressions.home);
         });
 
         link.addEventListener("click", function () {
             links.forEach(l => l.classList.remove("active"));
             link.classList.add("active");
-            let menuId = link.innerText.toLowerCase();
+            const menuId = link.innerText.toLowerCase();
             moveCartoon(link, expressions[menuId] || expressions.home);
         });
     });
 
-    // Hover effect on cartoon itself
+    // Hover on cartoon triggers angry
     cartoon.addEventListener("mouseenter", function () {
         setExpression(expressions.angry);
     });
 
-    cartoon.addEventListener("mouseleave", function () {
-        // Do NOT reset to active menu manually, let sleep happen naturally
-    });
+    // Periodic sleep checker
+    setInterval(() => {
+        const now = Date.now();
+        if (!isSleeping && now - lastActivityTime > 4000) {
+            cartoon.src = expressions.sleepy;
+            isSleeping = true;
+        }
+    }, 1000); // check every second
 });
