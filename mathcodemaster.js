@@ -1,4 +1,3 @@
-// Quiz Card Hover Animation
 document.querySelectorAll('.quiz-card').forEach(card => {
     card.addEventListener('mouseenter', () => {
         let color = card.getAttribute('data-color');
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const links = document.querySelectorAll(".nav-link");
     let idleTimer;
 
-    // Expressions for emoji
     const expressions = {
         home: "happy.gif",
         "learn math": "angel.gif",
@@ -42,9 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
         angry: "angry.gif"
     };
 
-    function moveCartoon(target, expression) {
+    function setExpression(expression) {
         clearTimeout(idleTimer);
         cartoon.src = expression;
+        idleTimer = setTimeout(() => {
+            cartoon.src = expressions.sleepy;
+        }, 4000);
+    }
+
+    function moveCartoon(target, expression) {
+        setExpression(expression);
 
         const rect = target.getBoundingClientRect();
         const navbarRect = document.querySelector(".navbar").getBoundingClientRect();
@@ -55,25 +60,17 @@ document.addEventListener("DOMContentLoaded", function () {
             duration: 0.5,
             ease: "power2.out"
         });
-
-        // Start idle timer to go to sleep
-        idleTimer = setTimeout(() => {
-            cartoon.src = expressions.sleepy;
-        }, 4000);
     }
 
-    // Move to active menu on load
+    // Move to default active link on page load
     let activeLink = document.querySelector(".nav-link.active");
-    if (activeLink) {
-        moveCartoon(activeLink, expressions.home);
-    }
+    if (activeLink) moveCartoon(activeLink, expressions.home);
 
-    // Hover & Click effects on nav menu
+    // Hover + click on menu items
     links.forEach(link => {
         link.addEventListener("mouseenter", function () {
             let menuId = link.innerText.toLowerCase();
-            let expression = expressions[menuId] || expressions.home;
-            moveCartoon(link, expression);
+            moveCartoon(link, expressions[menuId] || expressions.home);
         });
 
         link.addEventListener("click", function () {
@@ -84,21 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Hover effect on the cartoon itself (angry → then sleep)
+    // Hover effect on cartoon itself
     cartoon.addEventListener("mouseenter", function () {
-        clearTimeout(idleTimer);
-        cartoon.src = expressions.angry;
-
-        idleTimer = setTimeout(() => {
-            cartoon.src = expressions.sleepy;
-        }, 4000);
+        setExpression(expressions.angry);
     });
 
     cartoon.addEventListener("mouseleave", function () {
-        clearTimeout(idleTimer);
-
-        idleTimer = setTimeout(() => {
-            cartoon.src = expressions.sleepy;
-        }, 4000);
+        // Do NOT reset to active menu manually, let sleep happen naturally
     });
 });
